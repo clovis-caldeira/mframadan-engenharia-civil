@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b2545" />
+  <meta name="description" content="MFRAMADAN Engenharia Civil — Eng. Marivalda Nascimento (CREA 5071239135). ART, Laudos Técnicos, Responsabilidade Técnica, Acompanhamento de Obras, Consultorias e Projetos em São Paulo." />
+  <meta name="keywords" content="engenharia civil, ART, laudo técnico, responsável técnico, acompanhamento de obras, consultoria, projetos, São Paulo" />
+  <meta name="author" content="MFRAMADAN Engenharia Civil" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="MFRAMADAN Engenharia Civil — Soluções técnicas para sua obra" />
+  <meta property="og:description" content="ART, Laudos, Responsabilidade Técnica, Acompanhamento de Obras, Consultorias e Projetos. Mais de 10 anos de experiência." />
+  <meta property="og:locale" content="pt_BR" />
+
+  <title>MFRAMADAN Engenharia Civil — ART, Laudos e Projetos | Eng. Marivalda Nascimento</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+</head>
+<body>
+
+  <!-- ====== HEADER ====== -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#home" class="logo" aria-label="MFRAMADAN Engenharia Civil">
+        <svg class="logo__mark" width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+          <rect x="2" y="2" width="36" height="36" rx="6" fill="url(#g1)"/>
+          <path d="M8 30 V14 L14 20 L20 14 L26 20 L32 14 V30 Z" fill="#fff" opacity=".95"/>
+          <rect x="11" y="22" width="3" height="6" fill="#0b2545"/>
+          <rect x="18.5" y="22" width="3" height="6" fill="#0b2545"/>
+          <rect x="26" y="22" width="3" height="6" fill="#0b2545"/>
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#1d4ed8"/>
+              <stop offset="100%" stop-color="#0b2545"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="logo__text">
+          <strong>MFRAMADAN</strong>
+          <small>Engenharia Civil</small>
+        </span>
+      </a>
+
+      <nav class="nav" id="nav">
+        <ul class="nav__list">
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#diferenciais">Diferenciais</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+        <a href="https://wa.me/5511989520479?text=Olá,%20vim%20pelo%20site%20e%20gostaria%20de%20um%20orçamento."
+           target="_blank" rel="noopener" class="btn btn--primary nav__cta">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.93 11.93 0 0 0 12.04 0C5.5 0 .2 5.3.2 11.85a11.8 11.8 0 0 0 1.59 5.95L0 24l6.36-1.66a11.86 11.86 0 0 0 5.68 1.44h.01c6.55 0 11.85-5.3 11.85-11.85 0-3.17-1.23-6.15-3.38-8.45ZM12.05 21.5h-.01a9.66 9.66 0 0 1-4.93-1.36l-.35-.21-3.77.99 1.01-3.68-.23-.38a9.65 9.65 0 0 1-1.48-5.16c0-5.34 4.34-9.68 9.69-9.68 2.59 0 5.02 1.01 6.85 2.84a9.62 9.62 0 0 1 2.83 6.85c0 5.34-4.34 9.69-9.61 9.79Zm5.31-7.27c-.29-.15-1.72-.85-1.99-.95-.27-.1-.46-.15-.66.15s-.76.95-.93 1.15c-.17.2-.34.22-.63.07-.29-.15-1.23-.45-2.34-1.44-.86-.77-1.45-1.72-1.62-2.01-.17-.29-.02-.45.13-.6.13-.13.29-.34.44-.51.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.52-.07-.15-.66-1.59-.9-2.18-.24-.57-.48-.5-.66-.51l-.56-.01c-.2 0-.52.07-.79.37-.27.29-1.03 1-1.03 2.45 0 1.44 1.06 2.83 1.21 3.03.15.2 2.08 3.18 5.04 4.46.7.3 1.25.48 1.68.62.71.22 1.35.19 1.86.12.57-.08 1.72-.7 1.96-1.38.24-.68.24-1.26.17-1.38-.07-.12-.27-.2-.56-.34Z"/></svg>
+          WhatsApp
+        </a>
+      </nav>
+
+      <button class="nav__toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ====== HERO ====== -->
+  <section class="hero" id="home">
+    <div class="hero__bg" aria-hidden="true">
+      <div class="hero__grid"></div>
+      <div class="hero__glow"></div>
+    </div>
+    <div class="container hero__inner">
+      <div class="hero__content reveal">
+        <span class="badge">
+          <span class="badge__dot"></span>
+          CREA-SP 5071239135 · Responsável Técnica
+        </span>
+        <h1 class="hero__title">
+          Engenharia que sustenta <span class="text-gradient">seus projetos</span> do papel à entrega.
+        </h1>
+        <p class="hero__subtitle">
+          Mais de uma década de atuação em ART, laudos técnicos, responsabilidade técnica,
+          acompanhamento de obras, consultoria e projetos em São Paulo e região.
+        </p>
+
+        <div class="hero__cta">
+          <a href="#contato" class="btn btn--primary btn--lg">
+            Solicitar orçamento
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#servicos" class="btn btn--ghost btn--lg">Ver serviços</a>
+        </div>
+
+        <ul class="hero__stats">
+          <li>
+            <strong>10+</strong>
+            <span>Anos de experiência</span>
+          </li>
+          <li>
+            <strong>+500</strong>
+            <span>Obras acompanhadas</span>
+          </li>
+          <li>
+            <strong>100%</strong>
+            <span>Documentação no CREA</span>
+          </li>
+        </ul>
+      </div>
+
+      <aside class="hero__card reveal">
+        <div class="card-3d">
+          <div class="card-3d__top">
+            <svg width="36" height="36" viewBox="0 0 40 40" aria-hidden="true">
+              <rect width="40" height="40" rx="8" fill="#fff" opacity=".12"/>
+              <path d="M8 30 V14 L14 20 L20 14 L26 20 L32 14 V30 Z" fill="#fff"/>
+            </svg>
+            <span>MFRAMADAN</span>
+          </div>
+          <h3>Eng. Marivalda Nascimento</h3>
+          <p class="card-3d__role">Engenheira Civil · CREA 5071239135</p>
+
+          <ul class="card-3d__list">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Emissão de ART</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Laudos Técnicos</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Responsabilidade Técnica</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Acompanhamento de Obras</li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Consultorias & Projetos</li>
+          </ul>
+
+          <a href="https://wa.me/5511989520479?text=Olá,%20vim%20pelo%20site%20e%20gostaria%20de%20um%20orçamento."
+             target="_blank" rel="noopener" class="card-3d__cta">
+            Falar agora pelo WhatsApp →
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ====== TRUSTBAR ====== -->
+  <section class="trustbar">
+    <div class="container trustbar__inner">
+      <p class="trustbar__label">Reconhecida e regulamentada por</p>
+      <ul class="trustbar__list">
+        <li><strong>CREA-SP</strong><span>Conselho Regional de Engenharia</span></li>
+        <li><strong>CONFEA</strong><span>Conselho Federal</span></li>
+        <li><strong>ABNT</strong><span>Normas Técnicas</span></li>
+        <li><strong>Prefeitura SP</strong><span>Aprovações & Habite-se</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ====== SERVIÇOS ====== -->
+  <section class="section" id="servicos">
+    <div class="container">
+      <header class="section__head reveal">
+        <span class="eyebrow">Serviços</span>
+        <h2 class="section__title">Soluções completas em <span class="text-gradient">Engenharia Civil</span></h2>
+        <p class="section__lead">
+          Do documento ao acompanhamento da obra: cuidamos de toda a parte técnica
+          para que você tenha tranquilidade e segurança jurídica.
+        </p>
+      </header>
+
+      <div class="services">
+
+        <article class="service reveal">
+          <div class="service__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <path d="M14 2v6h6"/>
+              <path d="M9 13h6M9 17h6M9 9h2"/>
+            </svg>
+          </div>
+          <h3>Emissão de ART</h3>
+          <p>Anotação de Responsabilidade Técnica para obras, projetos, laudos e serviços de engenharia. Documentação completa junto ao CREA-SP.</p>
+          <a href="#contato" class="service__link">Solicitar ART →</a>
+        </article>
+
+        <article class="service reveal">
+          <div class="service__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M9 11H5a2 2 0 0 0-2 2v7h4"/>
+              <path d="M19 11h-4v9h4a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2Z"/>
+              <path d="M9 7V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v3"/>
+              <path d="M9 11v9h6v-9"/>
+            </svg>
+          </div>
+          <h3>Laudos Técnicos</h3>
+          <p>Vistorias, inspeções prediais, laudos de habite-se, perícias e relatórios técnicos com validade legal e padrão ABNT.</p>
+          <a href="#contato" class="service__link">Pedir laudo →</a>
+        </article>
+
+        <article class="service reveal">
+          <div class="service__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M3 21h18"/>
+              <path d="M5 21V7l7-4 7 4v14"/>
+              <path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01M9 17h.01M15 17h.01"/>
+            </svg>
+          </div>
+          <h3>Responsabilidade Técnica</h3>
+          <p>Atuação como Responsável Técnica (RT) para empresas, comércios e estabelecimentos que exigem profissional habilitado.</p>
+          <a href="#contato" class="service__link">Ser meu RT →</a>
+        </article>
+
+        <article class="service reveal">
+          <div class="service__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M2 22h20"/>
+              <path d="M4 22V10l8-6 8 6v12"/>
+              <path d="M9 14h6v8H9z"/>
+              <path d="M12 4V2"/>
+            </svg>
+          </div>
+          <h3>Acompanhamento de Obras</h3>
+          <p>Fiscalização técnica, controle de qualidade, cronograma, materiais e segurança. Sua obra entregue no prazo e dentro da norma.</p>
+          <a href="#contato" class="service__link">Acompanhar minha obra →</a>
+        </article>
+
+        <article class="service reveal">
+          <div class="service__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <h3>Consultorias</h3>
+          <p>Assessoria técnica para construtoras, incorporadoras, condomínios e proprietários. Análise de viabilidade, normas e regularização.</p>
+          <a href="#contato" class="service__link">Quero consultoria →</a>
+        </article>
+
+        <article class="service reveal">
+          <div class="service__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M3 3h18v18H3z"/>
+              <path d="M3 9h18M9 21V9"/>
+            </svg>
+          </div>
+          <h3>Projetos</h3>
+          <p>Projetos arquitetônicos, estruturais e complementares. Da concepção à aprovação na prefeitura, com toda a documentação legal.</p>
+          <a href="#contato" class="service__link">Iniciar meu projeto →</a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SOBRE ====== -->
+  <section class="section section--dark" id="sobre">
+    <div class="container about">
+      <div class="about__media reveal">
+        <div class="about__card">
+          <div class="about__badge">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+            Engenheira Civil Habilitada
+          </div>
+          <h3 class="about__name">Marivalda Nascimento</h3>
+          <p class="about__crea">CREA-SP <strong>5071239135</strong></p>
+          <ul class="about__contact">
+            <li>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+              (11) 98952-0479
+            </li>
+            <li>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2Z"/><path d="m22 6-10 7L2 6"/></svg>
+              mari17andrade@hotmail.com
+            </li>
+            <li>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              São Paulo e região
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="about__content reveal">
+        <span class="eyebrow eyebrow--light">Sobre</span>
+        <h2 class="section__title section__title--light">
+          Técnica, responsabilidade e <span class="text-gradient">presença em cada obra</span>.
+        </h2>
+        <p>
+          A <strong>MFRAMADAN Engenharia Civil</strong> nasceu com a missão de descomplicar a parte técnica
+          de quem constrói, reforma, regulariza ou empreende. Atendemos pessoas físicas, condomínios,
+          comércios, construtoras e incorporadoras com excelência e linguagem clara.
+        </p>
+        <p>
+          Cada projeto recebe atenção pessoal da engenheira responsável — você fala com quem assina a ART
+          e acompanha sua obra de perto. Compromisso com prazo, transparência e padrão técnico.
+        </p>
+
+        <ul class="about__benefits">
+          <li>
+            <span class="check">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+            Atendimento pessoal — você fala direto com a engenheira
+          </li>
+          <li>
+            <span class="check">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+            Documentação 100% regularizada no CREA-SP
+          </li>
+          <li>
+            <span class="check">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+            Prazos cumpridos e comunicação transparente
+          </li>
+          <li>
+            <span class="check">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+            Visita técnica e orçamento sem compromisso
+          </li>
+        </ul>
+
+        <a href="#contato" class="btn btn--primary">Conversar com a engenheira</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== DIFERENCIAIS / PROCESSO ====== -->
+  <section class="section" id="diferenciais">
+    <div class="container">
+      <header class="section__head reveal">
+        <span class="eyebrow">Como trabalhamos</span>
+        <h2 class="section__title">Um processo <span class="text-gradient">simples e técnico</span></h2>
+        <p class="section__lead">Em 4 etapas você sai da dúvida e entra na execução com segurança.</p>
+      </header>
+
+      <ol class="process">
+        <li class="process__item reveal">
+          <span class="process__num">01</span>
+          <h3>Contato inicial</h3>
+          <p>Conversamos pelo WhatsApp para entender sua demanda e necessidades.</p>
+        </li>
+        <li class="process__item reveal">
+          <span class="process__num">02</span>
+          <h3>Visita & análise técnica</h3>
+          <p>Realizamos a vistoria no local e levantamos toda a documentação necessária.</p>
+        </li>
+        <li class="process__item reveal">
+          <span class="process__num">03</span>
+          <h3>Proposta & ART</h3>
+          <p>Você recebe um orçamento claro e a emissão da ART junto ao CREA-SP.</p>
+        </li>
+        <li class="process__item reveal">
+          <span class="process__num">04</span>
+          <h3>Execução & entrega</h3>
+          <p>Acompanhamento técnico até a entrega final com toda a documentação legal.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ====== FAQ ====== -->
+  <section class="section section--soft" id="faq">
+    <div class="container faq-wrap">
+      <header class="section__head reveal">
+        <span class="eyebrow">Dúvidas frequentes</span>
+        <h2 class="section__title">Perguntas <span class="text-gradient">comuns</span></h2>
+      </header>
+
+      <div class="faq">
+        <details class="faq__item reveal" open>
+          <summary>O que é ART e quando preciso emitir?</summary>
+          <p>A Anotação de Responsabilidade Técnica (ART) é um documento obrigatório no CREA para qualquer obra, projeto ou serviço de engenharia. Ela garante a responsabilidade legal do profissional e é exigida em prefeituras, financiamentos e seguros.</p>
+        </details>
+        <details class="faq__item reveal">
+          <summary>Atendem apenas em São Paulo?</summary>
+          <p>Nosso atendimento principal é em São Paulo e região metropolitana, mas avaliamos demandas em outras cidades do estado. Consulte pelo WhatsApp.</p>
+        </details>
+        <details class="faq__item reveal">
+          <summary>Quanto custa um laudo técnico?</summary>
+          <p>O valor varia conforme o tipo de laudo, o imóvel e a urgência. Fazemos visita técnica e enviamos orçamento personalizado sem compromisso.</p>
+        </details>
+        <details class="faq__item reveal">
+          <summary>Posso contratar como Responsável Técnica da minha empresa?</summary>
+          <p>Sim. Atuamos como RT para empresas dos ramos exigidos pelo CREA-SP (construção, comércio, manutenção). Entre em contato para verificarmos a compatibilidade com sua atividade.</p>
+        </details>
+        <details class="faq__item reveal">
+          <summary>Qual o prazo para emissão da ART?</summary>
+          <p>Após a análise técnica e o aceite da proposta, a ART é emitida normalmente em até 48h úteis.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== CTA / CONTATO ====== -->
+  <section class="section section--cta" id="contato">
+    <div class="container cta">
+      <div class="cta__content reveal">
+        <span class="eyebrow eyebrow--light">Contato</span>
+        <h2 class="section__title section__title--light">
+          Vamos resolver sua <span class="text-gradient">demanda técnica</span>?
+        </h2>
+        <p class="cta__lead">
+          Preencha o formulário ou fale direto pelo WhatsApp. Respondemos em até 2 horas úteis.
+        </p>
+
+        <ul class="cta__channels">
+          <li>
+            <span class="cta__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.93 11.93 0 0 0 12.04 0C5.5 0 .2 5.3.2 11.85a11.8 11.8 0 0 0 1.59 5.95L0 24l6.36-1.66a11.86 11.86 0 0 0 5.68 1.44h.01c6.55 0 11.85-5.3 11.85-11.85 0-3.17-1.23-6.15-3.38-8.45Z"/></svg></span>
+            <div><strong>WhatsApp</strong><a href="https://wa.me/5511989520479" target="_blank" rel="noopener">(11) 98952-0479</a></div>
+          </li>
+          <li>
+            <span class="cta__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2Z"/><path d="m22 6-10 7L2 6"/></svg></span>
+            <div><strong>E-mail</strong><a href="mailto:mari17andrade@hotmail.com">mari17andrade@hotmail.com</a></div>
+          </li>
+          <li>
+            <span class="cta__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
+            <div><strong>Atendimento</strong><span>São Paulo e região · Seg–Sex 8h–18h</span></div>
+          </li>
+        </ul>
+      </div>
+
+      <form class="cta__form reveal" id="contactForm" novalidate>
+        <h3>Solicite seu orçamento</h3>
+
+        <label>
+          <span>Nome completo</span>
+          <input type="text" name="nome" required placeholder="Ex.: Marivalda Nascimento" />
+        </label>
+
+        <label>
+          <span>WhatsApp</span>
+          <input type="tel" name="whatsapp" required placeholder="(11) 9 0000-0000" />
+        </label>
+
+        <label>
+          <span>E-mail</span>
+          <input type="email" name="email" placeholder="seu@email.com" />
+        </label>
+
+        <label>
+          <span>Serviço desejado</span>
+          <select name="servico" required>
+            <option value="">Selecione…</option>
+            <option>Emissão de ART</option>
+            <option>Laudo Técnico</option>
+            <option>Responsabilidade Técnica</option>
+            <option>Acompanhamento de Obra</option>
+            <option>Consultoria</option>
+            <option>Projeto</option>
+            <option>Outro</option>
+          </select>
+        </label>
+
+        <label class="full">
+          <span>Mensagem</span>
+          <textarea name="mensagem" rows="4" placeholder="Conte um pouco sobre sua demanda…"></textarea>
+        </label>
+
+        <button type="submit" class="btn btn--primary btn--lg btn--block">
+          Enviar pedido
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+        <p class="cta__form-note">Ao enviar, você será redirecionada(o) ao WhatsApp com sua solicitação pronta.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <a href="#home" class="logo logo--light">
+          <svg class="logo__mark" width="36" height="36" viewBox="0 0 40 40" aria-hidden="true">
+            <rect x="2" y="2" width="36" height="36" rx="6" fill="url(#g2)"/>
+            <path d="M8 30 V14 L14 20 L20 14 L26 20 L32 14 V30 Z" fill="#fff" opacity=".95"/>
+            <defs>
+              <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#60a5fa"/>
+                <stop offset="100%" stop-color="#1d4ed8"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span class="logo__text">
+            <strong>MFRAMADAN</strong>
+            <small>Engenharia Civil</small>
+          </span>
+        </a>
+        <p>Soluções técnicas em engenharia civil com responsabilidade, transparência e prazos cumpridos.</p>
+      </div>
+
+      <div class="footer__col">
+        <h4>Serviços</h4>
+        <ul>
+          <li><a href="#servicos">Emissão de ART</a></li>
+          <li><a href="#servicos">Laudos Técnicos</a></li>
+          <li><a href="#servicos">Responsabilidade Técnica</a></li>
+          <li><a href="#servicos">Acompanhamento de Obras</a></li>
+          <li><a href="#servicos">Consultorias</a></li>
+          <li><a href="#servicos">Projetos</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#diferenciais">Como trabalhamos</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="https://wa.me/5511989520479" target="_blank" rel="noopener">(11) 98952-0479</a></li>
+          <li><a href="mailto:mari17andrade@hotmail.com">mari17andrade@hotmail.com</a></li>
+          <li>CREA-SP 5071239135</li>
+          <li>São Paulo · SP</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container">
+        <p>© <span id="year"></span> MFRAMADAN Engenharia Civil. Todos os direitos reservados.</p>
+        <p>Engenheira Responsável: Marivalda Nascimento · CREA-SP 5071239135</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp floating -->
+  <a href="https://wa.me/5511989520479?text=Olá,%20vim%20pelo%20site%20da%20MFRAMADAN%20e%20gostaria%20de%20um%20orçamento."
+     class="wa-float" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.93 11.93 0 0 0 12.04 0C5.5 0 .2 5.3.2 11.85a11.8 11.8 0 0 0 1.59 5.95L0 24l6.36-1.66a11.86 11.86 0 0 0 5.68 1.44h.01c6.55 0 11.85-5.3 11.85-11.85 0-3.17-1.23-6.15-3.38-8.45ZM12.05 21.5h-.01a9.66 9.66 0 0 1-4.93-1.36l-.35-.21-3.77.99 1.01-3.68-.23-.38a9.65 9.65 0 0 1-1.48-5.16c0-5.34 4.34-9.68 9.69-9.68 2.59 0 5.02 1.01 6.85 2.84a9.62 9.62 0 0 1 2.83 6.85c0 5.34-4.34 9.69-9.61 9.79Zm5.31-7.27c-.29-.15-1.72-.85-1.99-.95-.27-.1-.46-.15-.66.15s-.76.95-.93 1.15c-.17.2-.34.22-.63.07-.29-.15-1.23-.45-2.34-1.44-.86-.77-1.45-1.72-1.62-2.01-.17-.29-.02-.45.13-.6.13-.13.29-.34.44-.51.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.52-.07-.15-.66-1.59-.9-2.18-.24-.57-.48-.5-.66-.51l-.56-.01c-.2 0-.52.07-.79.37-.27.29-1.03 1-1.03 2.45 0 1.44 1.06 2.83 1.21 3.03.15.2 2.08 3.18 5.04 4.46.7.3 1.25.48 1.68.62.71.22 1.35.19 1.86.12.57-.08 1.72-.7 1.96-1.38.24-.68.24-1.26.17-1.38-.07-.12-.27-.2-.56-.34Z"/></svg>
+  </a>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
