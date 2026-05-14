@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background:
+      radial-gradient(900px 500px at 80% 0%, rgba(96,165,250,.25), transparent 60%),
+      radial-gradient(600px 400px at 0% 100%, rgba(29,78,216,.30), transparent 60%),
+      linear-gradient(160deg, #061a36 0%, #0b2545 55%, #061a36 100%);
+    color: #fff;
+    position: relative;
+  }
+  /* Grid de fundo */
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(96,165,250,.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(96,165,250,.08) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at 50% 50%, #000 30%, transparent 75%);
+  }
+  .wrap {
+    position: relative;
+    width: 100%; height: 100%;
+    padding: 64px 72px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Top: logo + badge CREA */
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .logo-mark {
+    width: 72px; height: 72px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #1d4ed8, #0b2545);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 14px 30px rgba(29,78,216,.4), inset 0 1px 0 rgba(255,255,255,.15);
+  }
+  .logo-text strong {
+    font-weight: 800;
+    font-size: 28px;
+    letter-spacing: .04em;
+    color: #fff;
+    display: block;
+    line-height: 1;
+  }
+  .logo-text small {
+    font-size: 13px;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: #93c5fd;
+    margin-top: 8px;
+    display: block;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    background: rgba(96,165,250,.14);
+    border: 1px solid rgba(96,165,250,.35);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: #bfdbfe;
+    text-transform: uppercase;
+  }
+  .badge .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #60a5fa;
+    box-shadow: 0 0 0 5px rgba(96,165,250,.25);
+  }
+
+  /* Middle: título */
+  .middle h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 76px;
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    color: #fff;
+    max-width: 900px;
+  }
+  .middle h1 .grad {
+    background: linear-gradient(135deg, #93c5fd 0%, #3b82f6 60%, #1d4ed8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .middle .lead {
+    margin-top: 22px;
+    font-size: 22px;
+    color: #cbd5e0;
+    max-width: 800px;
+    line-height: 1.4;
+  }
+
+  /* Services chips */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 26px;
+  }
+  .chip {
+    padding: 9px 18px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12);
+    font-size: 14px;
+    font-weight: 500;
+    color: #e2e8f0;
+  }
+
+  /* Bottom: assinatura + contato */
+  .bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,.10);
+    padding-top: 28px;
+  }
+  .signature .role {
+    font-size: 13px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: #60a5fa;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .signature .name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+  }
+  .signature .crea {
+    margin-top: 8px;
+    font-size: 15px;
+    color: #cbd5e0;
+  }
+  .signature .crea strong { color: #93c5fd; }
+  .contact {
+    text-align: right;
+  }
+  .contact .url {
+    font-size: 18px;
+    color: #93c5fd;
+    font-weight: 600;
+    letter-spacing: .02em;
+  }
+  .contact .phone {
+    margin-top: 8px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: .02em;
+  }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+
+  <div class="wrap">
+
+    <div class="top">
+      <div class="logo">
+        <span class="logo-mark">
+          <svg width="44" height="44" viewBox="0 0 40 40">
+            <path d="M8 30 V14 L14 20 L20 14 L26 20 L32 14 V30 Z" fill="#fff" opacity=".96"/>
+            <rect x="11" y="22" width="3" height="6" fill="#0b2545"/>
+            <rect x="18.5" y="22" width="3" height="6" fill="#0b2545"/>
+            <rect x="26" y="22" width="3" height="6" fill="#0b2545"/>
+          </svg>
+        </span>
+        <span class="logo-text">
+          <strong>MFRAMADAN</strong>
+          <small>Engenharia Civil</small>
+        </span>
+      </div>
+
+      <span class="badge">
+        <span class="dot"></span>
+        CREA-SP 5071239135
+      </span>
+    </div>
+
+    <div class="middle">
+      <h1>Engenharia que sustenta <span class="grad">seus projetos</span><br/>do papel à entrega.</h1>
+      <p class="lead">Soluções técnicas em engenharia civil com responsabilidade, transparência e prazos cumpridos.</p>
+
+      <div class="chips">
+        <span class="chip">ART</span>
+        <span class="chip">Laudos Técnicos</span>
+        <span class="chip">Responsabilidade Técnica</span>
+        <span class="chip">Acompanhamento de Obras</span>
+        <span class="chip">Consultorias</span>
+        <span class="chip">Projetos</span>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <div class="signature">
+        <div class="role">Engenheira Responsável</div>
+        <div class="name">Marivalda Nascimento</div>
+        <div class="crea">CREA-SP <strong>5071239135</strong> · São Paulo · SP</div>
+      </div>
+      <div class="contact">
+        <div class="url">mframadan.vercel.app</div>
+        <div class="phone">(11) 98952-0479</div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
