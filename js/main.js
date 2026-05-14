@@ -86,14 +86,14 @@
       }
 
       const linhas = [
-        `Olá, sou ${nome} e gostaria de um orçamento.`,
+        `Olá Marivalda! Sou ${nome} e gostaria de solicitar um orçamento pelo site.`,
         '',
         `*Serviço:* ${servico}`,
         `*WhatsApp:* ${wpp}`,
         email ? `*E-mail:* ${email}` : null,
         mensagem ? `*Mensagem:* ${mensagem}` : null,
         '',
-        '— enviado pelo site MFRAMADAN'
+        'Aguardo seu retorno. Obrigado(a)!'
       ].filter(Boolean);
 
       const texto = encodeURIComponent(linhas.join('\n'));
