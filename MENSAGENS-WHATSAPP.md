@@ -60,7 +60,8 @@ burocracia:
 Orçamento grátis e sem compromisso. Pode chamar! 😊
 
 📲 https://wa.me/5511989520479
-🌐 https://mframadan.vercel.app/#reforma
+📋 Checklist: https://mframadan.vercel.app/checklist-reforma.html
+🌐 Site: https://mframadan.vercel.app/#reforma
 ```
 
 ---
@@ -94,7 +95,8 @@ Se quiser o checklist OU um orçamento de ART, é só
 me chamar:
 
 📲 https://wa.me/5511989520479
-🌐 https://mframadan.vercel.app/#reforma
+📋 Checklist: https://mframadan.vercel.app/checklist-reforma.html
+🌐 Site: https://mframadan.vercel.app/#reforma
 ```
 
 ---

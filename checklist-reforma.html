@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Checklist gratuito da documentação técnica exigida pelo condomínio para liberar reforma de apartamento — MFRAMADAN Engenharia Civil" />
+  <meta name="robots" content="index, follow" />
+
+  <title>Checklist — Reforma em Apartamento | MFRAMADAN Engenharia Civil</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+  <style>
+    :root {
+      --brand-900: #061a36;
+      --brand-800: #0b2545;
+      --brand-700: #133b7c;
+      --brand-600: #1d4ed8;
+      --brand-300: #60a5fa;
+      --brand-100: #dbeafe;
+      --brand-50:  #eff6ff;
+      --ink-900: #0a0f1c;
+      --ink-700: #2d3748;
+      --ink-600: #4a5568;
+      --ink-500: #718096;
+      --ink-300: #cbd5e0;
+      --ink-200: #e2e8f0;
+      --ink-100: #edf2f7;
+      --ink-50:  #f7fafc;
+      --whatsapp: #25d366;
+      --danger: #b91c1c;
+      --danger-bg: #fee2e2;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--ink-100);
+      color: var(--ink-700);
+      line-height: 1.5;
+      font-size: 11pt;
+      -webkit-font-smoothing: antialiased;
+      padding: 24px 0;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      background: #fff;
+      margin: 0 auto;
+      padding: 16mm 18mm;
+      box-shadow: 0 10px 40px rgba(0,0,0,.12);
+      position: relative;
+    }
+
+    .page + .page { margin-top: 24px; }
+
+    /* ===== Cabeçalho ===== */
+    .head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--brand-700);
+      margin-bottom: 18px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand svg { width: 36px; height: 36px; }
+    .brand strong {
+      display: block;
+      font-weight: 800;
+      font-size: 14pt;
+      color: var(--brand-800);
+      letter-spacing: .02em;
+      line-height: 1;
+    }
+    .brand small {
+      font-size: 7pt;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--ink-500);
+      margin-top: 3px;
+      display: inline-block;
+    }
+    .crea {
+      text-align: right;
+      font-size: 9pt;
+      color: var(--ink-600);
+    }
+    .crea strong { color: var(--brand-800); font-size: 9pt; }
+
+    /* ===== Hero do documento ===== */
+    .hero {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    .hero__eyebrow {
+      display: inline-block;
+      background: var(--brand-50);
+      color: var(--brand-700);
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 8pt;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      border: 1px solid var(--brand-100);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 700;
+      font-size: 22pt;
+      line-height: 1.15;
+      color: var(--ink-900);
+      letter-spacing: -.01em;
+    }
+    .hero h1 span {
+      color: var(--brand-700);
+    }
+    .hero p {
+      margin-top: 8px;
+      color: var(--ink-600);
+      font-size: 10pt;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ===== Alerta ===== */
+    .alert {
+      background: var(--danger-bg);
+      border-left: 3px solid var(--danger);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 18px;
+      font-size: 9.5pt;
+      color: var(--danger);
+    }
+    .alert strong { color: var(--danger); }
+
+    /* ===== Lista do checklist ===== */
+    .list { display: flex; flex-direction: column; gap: 8px; }
+    .item {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 12px;
+      padding: 11px 14px;
+      background: var(--ink-50);
+      border: 1px solid var(--ink-200);
+      border-radius: 8px;
+      page-break-inside: avoid;
+    }
+    .item__num {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, var(--brand-600), var(--brand-800));
+      color: #fff;
+      font-weight: 700;
+      font-size: 10pt;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+    }
+    .item h3 {
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--ink-900);
+      margin-bottom: 3px;
+    }
+    .item h3 .tag {
+      display: inline-block;
+      font-size: 7pt;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--brand-100);
+      color: var(--brand-700);
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .item h3 .tag--essencial {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .item p {
+      font-size: 9.5pt;
+      color: var(--ink-600);
+      line-height: 1.45;
+    }
+    .item p strong { color: var(--ink-900); }
+
+    /* ===== Box: o que pode/não pode ===== */
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .compare__col {
+      background: var(--ink-50);
+      border-radius: 8px;
+      padding: 12px 14px;
+      border: 1px solid var(--ink-200);
+    }
+    .compare__col h4 {
+      font-size: 10pt;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .compare__col h4.ok { color: #14532d; }
+    .compare__col h4.bad { color: var(--danger); }
+    .compare__col ul {
+      list-style: none;
+      font-size: 9pt;
+      color: var(--ink-700);
+    }
+    .compare__col li {
+      padding: 3px 0;
+      padding-left: 14px;
+      position: relative;
+    }
+    .compare__col li::before {
+      position: absolute;
+      left: 0;
+      top: 4px;
+      font-size: 8pt;
+    }
+    .compare__col.ok li::before { content: '✓'; color: #16a34a; font-weight: 700; }
+    .compare__col.bad li::before { content: '✗'; color: var(--danger); font-weight: 700; }
+
+    /* ===== CTA final ===== */
+    .cta {
+      margin-top: 18px;
+      background: linear-gradient(135deg, var(--brand-800), var(--brand-900));
+      border-radius: 10px;
+      padding: 18px 22px;
+      color: #fff;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 14pt;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+    .cta p {
+      color: var(--ink-300);
+      font-size: 9.5pt;
+      margin-bottom: 12px;
+    }
+    .cta__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--whatsapp);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 10pt;
+      text-decoration: none;
+    }
+    .cta__btn svg { width: 16px; height: 16px; }
+
+    /* ===== Rodapé ===== */
+    .foot {
+      margin-top: 20px;
+      padding-top: 12px;
+      border-top: 1px solid var(--ink-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8pt;
+      color: var(--ink-500);
+    }
+    .foot a { color: var(--brand-600); text-decoration: none; }
+    .foot strong { color: var(--ink-700); }
+
+    /* ===== Print ===== */
+    @page { size: A4; margin: 0; }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page { box-shadow: none; margin: 0; page-break-after: always; }
+      .page:last-child { page-break-after: auto; }
+      .no-print { display: none !important; }
+    }
+
+    /* ===== Botão flutuante de download ===== */
+    .print-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--brand-700);
+      color: #fff;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      border: 0;
+      box-shadow: 0 12px 28px rgba(11, 37, 69, .35);
+      z-index: 100;
+    }
+    .print-btn:hover { background: var(--brand-800); }
+
+    @media (max-width: 800px) {
+      .page { width: 100%; padding: 14mm; box-shadow: none; }
+      body { padding: 0; }
+      .compare { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn no-print" onclick="window.print()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Salvar como PDF
+  </button>
+
+  <!-- ===== PÁGINA 1 ===== -->
+  <article class="page">
+
+    <header class="head">
+      <div class="brand">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <defs>
+            <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#1d4ed8"/>
+              <stop offset="100%" stop-color="#0b2545"/>
+            </linearGradient>
+          </defs>
+          <rect width="40" height="40" rx="8" fill="url(#lg)"/>
+          <path d="M8 30 V14 L14 20 L20 14 L26 20 L32 14 V30 Z" fill="#fff" opacity=".95"/>
+          <rect x="11" y="22" width="3" height="6" fill="#0b2545"/>
+          <rect x="18.5" y="22" width="3" height="6" fill="#0b2545"/>
+          <rect x="26" y="22" width="3" height="6" fill="#0b2545"/>
+        </svg>
+        <div>
+          <strong>MFRAMADAN</strong>
+          <small>Engenharia Civil</small>
+        </div>
+      </div>
+      <div class="crea">
+        <strong>Eng. Marivalda Nascimento</strong><br/>
+        CREA-SP 5071239135
+      </div>
+    </header>
+
+    <section class="hero">
+      <span class="hero__eyebrow">Checklist Gratuito</span>
+      <h1>Vai reformar seu apartamento?<br/>Tenha <span>tudo certinho</span> com o condomínio.</h1>
+      <p>Lista dos documentos técnicos que o seu condomínio vai exigir antes de liberar a obra, segundo a <strong>NBR 16280</strong>.</p>
+    </section>
+
+    <div class="alert">
+      <strong>⚠️ Atenção:</strong> Iniciar reforma sem essa documentação pode gerar <strong>multa, embargo da obra, processo administrativo</strong> e responsabilização civil em caso de acidente. A NBR 16280 é norma técnica de cumprimento obrigatório em condomínios.
+    </div>
+
+    <div class="list">
+
+      <div class="item">
+        <span class="item__num">1</span>
+        <div>
+          <h3>ART de Reforma <span class="tag tag--essencial">Essencial</span></h3>
+          <p>Anotação de Responsabilidade Técnica registrada no <strong>CREA-SP</strong> pelo engenheiro responsável. É o documento que comprova quem responde tecnicamente pela obra. Sem ART, o condomínio <strong>não pode autorizar</strong> o início da reforma.</p>
+        </div>
+      </div>
+
+      <div class="item">
+        <span class="item__num">2</span>
+        <div>
+          <h3>Laudo Técnico — NBR 16280 <span class="tag tag--essencial">Essencial</span></h3>
+          <p>Análise técnica das intervenções previstas. Identifica o que é <strong>estrutural × vedação</strong>, avalia riscos e atesta que a reforma <strong>não compromete a estrutura</strong> do edifício nem dos vizinhos.</p>
+        </div>
+      </div>
+
+      <div class="item">
+        <span class="item__num">3</span>
+        <div>
+          <h3>Memorial Descritivo <span class="tag">Obrigatório</span></h3>
+          <p>Documento detalhado com <strong>todos os serviços que serão executados</strong> (demolições, alvenarias, hidráulica, elétrica, revestimentos, etc.), materiais empregados e padrões técnicos seguidos.</p>
+        </div>
+      </div>
+
+      <div class="item">
+        <span class="item__num">4</span>
+        <div>
+          <h3>Cronograma Físico da Obra <span class="tag">Obrigatório</span></h3>
+          <p>Datas previstas de início, principais etapas e <strong>data de conclusão</strong>. Geralmente o condomínio limita o prazo (ex.: 60–90 dias) e define horários permitidos para serviços barulhentos.</p>
+        </div>
+      </div>
+
+      <div class="item">
+        <span class="item__num">5</span>
+        <div>
+          <h3>Termo de Responsabilidade do Morador <span class="tag">Obrigatório</span></h3>
+          <p>Declaração assinada pelo <strong>proprietário/inquilino</strong> assumindo responsabilidade por eventuais danos a áreas comuns ou unidades vizinhas durante a reforma.</p>
+        </div>
+      </div>
+
+      <div class="item">
+        <span class="item__num">6</span>
+        <div>
+          <h3>Documentação dos Trabalhadores <span class="tag">NR-18 / NR-35</span></h3>
+          <p>Lista dos profissionais que entrarão na obra com <strong>RG, CPF, comprovação de NRs</strong> (segurança em altura, eletricidade, etc.) quando aplicável. Necessário para a portaria liberar acesso.</p>
+        </div>
+      </div>
+
+      <div class="item">
+        <span class="item__num">7</span>
+        <div>
+          <h3>Apólice de Seguro / RCG <span class="tag">Recomendado</span></h3>
+          <p>Alguns condomínios exigem <strong>seguro de Responsabilidade Civil Geral</strong> da obra, cobrindo danos a terceiros. Em reformas grandes (estruturais), praticamente todos exigem.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="foot">
+      <span><strong>MFRAMADAN Engenharia Civil</strong> · CREA-SP 5071239135</span>
+      <span>📲 (11) 98952-0479 · <a href="https://mframadan.vercel.app/">mframadan.vercel.app</a></span>
+    </div>
+
+  </article>
+
+  <!-- ===== PÁGINA 2 ===== -->
+  <article class="page">
+
+    <header class="head">
+      <div class="brand">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <rect width="40" height="40" rx="8" fill="url(#lg)"/>
+          <path d="M8 30 V14 L14 20 L20 14 L26 20 L32 14 V30 Z" fill="#fff" opacity=".95"/>
+        </svg>
+        <div>
+          <strong>MFRAMADAN</strong>
+          <small>Engenharia Civil</small>
+        </div>
+      </div>
+      <div class="crea">
+        <strong>Checklist de Reforma</strong><br/>
+        Página 2 de 2
+      </div>
+    </header>
+
+    <section class="hero" style="margin-bottom: 14px;">
+      <h1 style="font-size: 18pt;">O que <span>pode</span> e o que <span style="color: var(--danger);">não pode</span> mexer</h1>
+      <p>Antes de quebrar qualquer parede, identifique se ela é estrutural ou apenas de vedação.</p>
+    </section>
+
+    <div class="compare">
+      <div class="compare__col ok">
+        <h4 class="ok">✅ Geralmente PODE</h4>
+        <ul>
+          <li>Trocar piso, azulejo e revestimento</li>
+          <li>Mexer em paredes de vedação (drywall, alvenaria fina)</li>
+          <li>Refazer hidráulica/elétrica dentro do apto</li>
+          <li>Pintar (interno) com tinta sem cheiro forte</li>
+          <li>Trocar louças, metais, bancada</li>
+          <li>Integrar cozinha/sala (se a parede for de vedação)</li>
+          <li>Trocar armários e marcenaria</li>
+        </ul>
+      </div>
+      <div class="compare__col bad">
+        <h4 class="bad">⛔ NÃO pode (ou tem regras especiais)</h4>
+        <ul>
+          <li>Demolir parede ou pilar estrutural</li>
+          <li>Mexer na laje (furar, perfurar profundamente)</li>
+          <li>Alterar fachada externa (cor, janelas, sacada)</li>
+          <li>Mudar prumada hidráulica/elétrica do prédio</li>
+          <li>Sobrecarregar laje além do projeto original</li>
+          <li>Fazer churrasqueira sem aprovação do condomínio</li>
+          <li>Trabalhar fora dos horários permitidos</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hero" style="margin: 20px 0 12px; text-align: left;">
+      <h1 style="font-size: 16pt;">Etapas para liberar sua reforma</h1>
+    </div>
+
+    <div class="list">
+      <div class="item">
+        <span class="item__num">A</span>
+        <div>
+          <h3>Visita técnica no apartamento</h3>
+          <p>A engenheira vai ao local, avalia o que você quer fazer, identifica o que é estrutural e o que não é, e levanta o que vai precisar para o seu condomínio específico.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="item__num">B</span>
+        <div>
+          <h3>Elaboração da documentação técnica</h3>
+          <p>Emissão da ART no CREA, redação do laudo conforme NBR 16280, memorial descritivo e cronograma. <strong>Prazo: até 48h úteis após a visita.</strong></p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="item__num">C</span>
+        <div>
+          <h3>Entrega à administração do condomínio</h3>
+          <p>Você (ou nós, se preferir) entrega o pacote completo à administração. Em geral o condomínio leva 5 a 10 dias úteis para autorizar o início.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="item__num">D</span>
+        <div>
+          <h3>Acompanhamento durante a obra</h3>
+          <p>Visitas técnicas periódicas para garantir que a execução está conforme o projeto e a NBR 16280. Ao fim, emissão do <strong>termo de conclusão</strong> para encerrar o processo no condomínio.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Quer uma avaliação gratuita?</h3>
+      <p>Em 5 minutos no WhatsApp eu te digo exatamente o que sua reforma vai precisar.</p>
+      <a href="https://wa.me/5511989520479?text=Olá,%20recebi%20o%20checklist%20de%20reforma%20e%20gostaria%20de%20uma%20avaliação." class="cta__btn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.93 11.93 0 0 0 12.04 0C5.5 0 .2 5.3.2 11.85a11.8 11.8 0 0 0 1.59 5.95L0 24l6.36-1.66a11.86 11.86 0 0 0 5.68 1.44h.01c6.55 0 11.85-5.3 11.85-11.85 0-3.17-1.23-6.15-3.38-8.45Z"/></svg>
+        (11) 98952-0479
+      </a>
+    </div>
+
+    <div class="foot">
+      <span><strong>MFRAMADAN Engenharia Civil</strong> · CREA-SP 5071239135</span>
+      <span>📲 (11) 98952-0479 · <a href="https://mframadan.vercel.app/">mframadan.vercel.app</a></span>
+    </div>
+
+  </article>
+
+</body>
+</html>
