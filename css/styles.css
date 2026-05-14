@@ -792,6 +792,8 @@ input, select, textarea { font: inherit; color: inherit; }
 
 .cta__form {
   background: var(--white);
+  color: var(--ink-900);
+  color-scheme: light;
   padding: 36px;
   border-radius: var(--r-xl);
   box-shadow: var(--shadow-lg);
@@ -808,6 +810,7 @@ input, select, textarea { font: inherit; color: inherit; }
   display: flex;
   flex-direction: column;
   gap: 6px;
+  color: var(--ink-900);
 }
 .cta__form label.full { grid-column: 1 / -1; }
 .cta__form span {
@@ -822,19 +825,52 @@ input, select, textarea { font: inherit; color: inherit; }
   border-radius: var(--r-md);
   padding: 12px 14px;
   font-size: .95rem;
-  background: var(--ink-50);
-  transition: border-color var(--t-fast), background var(--t-fast);
+  background-color: var(--white);
+  color: var(--ink-900);
+  -webkit-text-fill-color: var(--ink-900);
+  caret-color: var(--brand-600);
+  color-scheme: light;
+  transition: border-color var(--t-fast), background-color var(--t-fast), box-shadow var(--t-fast);
   font-family: inherit;
   width: 100%;
+}
+.cta__form input::placeholder,
+.cta__form textarea::placeholder {
+  color: var(--ink-400);
+  opacity: 1;
 }
 .cta__form input:focus,
 .cta__form select:focus,
 .cta__form textarea:focus {
   outline: none;
   border-color: var(--brand-500);
-  background: var(--white);
+  background-color: var(--white);
+  color: var(--ink-900);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, .12);
 }
+.cta__form select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2.5'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+}
+.cta__form select option { color: var(--ink-900); background: var(--white); }
 .cta__form textarea { resize: vertical; min-height: 100px; }
+
+/* Bloqueia o azul/amarelo do autofill do Chrome */
+.cta__form input:-webkit-autofill,
+.cta__form input:-webkit-autofill:hover,
+.cta__form input:-webkit-autofill:focus,
+.cta__form select:-webkit-autofill,
+.cta__form textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--ink-900);
+  -webkit-box-shadow: 0 0 0 1000px var(--white) inset;
+  caret-color: var(--brand-600);
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 .cta__form-note {
   font-size: .78rem;
   color: var(--ink-500);
