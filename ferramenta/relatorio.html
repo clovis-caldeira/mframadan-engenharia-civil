@@ -50,7 +50,12 @@
   .tool.active{background:var(--danger);color:#fff;border-color:var(--danger)}
   .canvas-box{position:relative;background:#fff;border:1px dashed var(--ink-300);border-radius:8px;display:flex;justify-content:center;align-items:center;min-height:120px;overflow:auto}
   .canvas-box canvas{max-width:100%;touch-action:none;display:block}
-  .photo textarea{margin-top:10px;background:#fff}
+  .photo textarea{margin-top:8px;background:#fff}
+  .frase-sel{margin-top:10px;font-size:13px;color:var(--brand-700);background:var(--brand-50);border:1px solid var(--brand-100);border-radius:8px;padding:9px 12px;width:100%;font-weight:600;cursor:pointer}
+  .frase-sel:focus{outline:0;border-color:var(--brand-600)}
+  .presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .preset{background:var(--ink-50);border:1px solid var(--ink-200);color:var(--ink-700);font-size:12px;font-weight:600;padding:6px 11px;border-radius:7px}
+  .preset:hover{background:var(--brand-50);border-color:var(--brand-100);color:var(--brand-700)}
   .add-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
   .empty{color:var(--ink-500);font-size:13px;text-align:center;padding:20px}
   .file-lbl{display:inline-flex;align-items:center;gap:6px;background:var(--brand-50);color:var(--brand-700);border:1px solid var(--brand-100);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
@@ -72,13 +77,17 @@
   .pg figcaption{margin-bottom:8px;text-align:justify}
   .pg figcaption b{font-weight:700}
   .pg figure img{display:block;max-width:78%;max-height:165mm;margin:0 auto;border:1px solid #ddd}
-  .pg .sig{margin-top:60px}
+  .pg{display:flex;flex-direction:column}
+  .pg .sig{margin-top:48px}
   .pg .sig b{display:block;margin-top:34px}
+  .pg__body{flex:1}
+  .pg__foot{margin-top:auto;padding-top:8px;border-top:1px solid #ddd;display:flex;justify-content:space-between;align-items:flex-end;font-family:Arial,sans-serif;font-size:8.5pt;color:#888}
+  .pg__foot b{color:#555;font-weight:600}
   @media print{
     body{background:#fff}
     .topbar,.doc-bar,#editor,.hint{display:none!important}
     #doc{display:block!important;background:#fff;padding:0}
-    .pg{width:auto;min-height:auto;margin:0;padding:14mm 16mm;box-shadow:none;page-break-after:always}
+    .pg{width:auto;min-height:262mm;margin:0;padding:14mm 16mm;box-shadow:none;page-break-after:always}
     .pg:last-child{page-break-after:auto}
     @page{size:A4;margin:0}
   }
@@ -148,7 +157,8 @@
       <h2>4 · Ambientes e fotos</h2>
       <p class="sub">As fotos são numeradas automaticamente (Foto 1, 2, 3…) na ordem dos ambientes.</p>
       <div id="ambs"></div>
-      <button class="btn-primary" onclick="addAmbiente()">+ Adicionar ambiente</button>
+      <div class="presets" id="presets"></div>
+      <button class="btn-primary" onclick="addAmbiente()">+ Adicionar ambiente (em branco)</button>
     </div>
 
     <div class="card">
@@ -212,6 +222,44 @@ function blankState(){
   };
 }
 const uid=()=>Math.random().toString(36).slice(2,9);
+
+/* Biblioteca de frases técnicas (baseada no modelo de relatório) */
+const FRASES={
+"Portas e ferragens":[
+"A maçaneta da porta não retorna automaticamente à posição de repouso após o acionamento.",
+"Constatou-se a presença de resíduos de tinta provenientes da porta sobre a maçaneta e a fechadura, bem como danos no acabamento da pintura da folha da porta.",
+"Observou-se a ocorrência de danos ao batente em decorrência da instalação da contra testa.",
+"Dificuldade na operação de abertura e fechamento da porta.",
+"Presença de tinta da porta na maçaneta."],
+"Soleira, piso e rodapé":[
+"A soleira encontra-se danificada (com ruptura) e com presença de resíduos de tinta oriundos da pintura das paredes e portas.",
+"Ausência de acabamento abaixo da soleira.",
+"Falta de acabamento adequado na soleira.",
+"Falha de acabamento no rodapé, bem como a presença de resíduos de obra.",
+"Rodapé danificado, com comprometimento do acabamento.",
+"Peça do rodapé danificada, bem como excesso de rejunte.",
+"Verificou-se a ocorrência de perfuração e desnível no piso laminado, com comprometimento de sua integridade, sendo necessária a substituição dos elementos danificados."],
+"Revestimentos e pintura":[
+"Existem manchas no revestimento texturizado e cerâmica danificada, sendo necessária a remoção e substituição da peça comprometida.",
+"Constatou-se não conformidade no acabamento da pintura do peitoril, caracterizada por irregularidades superficiais, sendo necessária a pintura para restabelecimento das condições adequadas de acabamento.",
+"Falha no acabamento junto à porta, caracterizada pela aplicação indevida de revestimento texturizado além dos limites da parede, com recobrimento do batente.",
+"Respingos de revestimento texturizado sobre o batente, evidenciando aplicação além dos limites da parede.",
+"Presença de respingos de tinta, bem como ausência de rejunte, caracterizando inadequação no acabamento.",
+"Excesso de rejunte nas superfícies do rodapé e do piso, bem como manchas na parede e presença de resíduos de obra.",
+"Verificou-se ausência de pintura no peitoril, caracterizando inadequação no acabamento final.",
+"Ausência de finalização adequada do acabamento externo na região superior do peitoril, bem como da pintura do peitoril.",
+"Dano no revestimento."],
+"Hidráulica e escoamento":[
+"Verificou-se deficiência no escoamento da água da pia, possivelmente associada à presença de resíduos remanescentes da obra. Foi realizada a desobstrução no local, recomendando-se o registro da ocorrência para monitoramento, em caso de recorrência.",
+"Constatou-se ausência de caimento adequado no piso, com acúmulo de água e escoamento ineficiente para o ralo, em desconformidade com as ABNT NBR 13753 e ABNT NBR 15575.",
+"Verificou-se a permanência de água acumulada após o tempo esperado para escoamento, evidenciando deficiência no caimento do piso, em desconformidade com os requisitos de desempenho da ABNT NBR 15575.",
+"Ausência de caimento adequado no piso, comprometendo o escoamento da água em direção ao ralo. Verificou-se, ainda, que o nível do piso encontra-se superior ao nível do piso adjacente."],
+"Resíduos e limpeza":[
+"Presença de resíduos de obra que devem ser removidos antes da entrega definitiva.",
+"Necessária limpeza fina do ambiente para entrega adequada da unidade."]
+};
+
+const PRESETS=["ESTAR/APA","SALA","COZINHA","DORMITÓRIO","DORMITÓRIO 1","DORMITÓRIO 2","BANHEIRO","TERRAÇO","SACADA","OFFICE","ÁREA DE SERVIÇO","HALL"];
 
 /* ---------- Bind dos campos simples ---------- */
 const FIELD_MAP = {
@@ -313,6 +361,15 @@ function downscale(file){
 }
 
 /* ---------- Foto card + anotação (seta/círculo) ---------- */
+function fraseOptions(){
+  let o='<option value="">＋ Inserir frase técnica pronta…</option>';
+  for(const cat in FRASES){
+    o+='<optgroup label="'+cat+'">';
+    FRASES[cat].forEach(fr=>{ o+='<option value="'+esc(fr)+'">'+esc(fr.length>90?fr.slice(0,88)+"…":fr)+'</option>'; });
+    o+='</optgroup>';
+  }
+  return o;
+}
 function renderFoto(amb,f,n){
   const wrap=document.createElement("div");wrap.className="photo";
   wrap.dataset.tool="arrow";
@@ -330,11 +387,18 @@ function renderFoto(amb,f,n){
       '</div>'+
     '</div>'+
     '<div class="canvas-box"><canvas></canvas></div>'+
+    '<select class="frase-sel">'+fraseOptions()+'</select>'+
     '<textarea placeholder="Descrição da não conformidade (vira a legenda: “Foto '+n+': …”)">'+esc(f.desc)+'</textarea>';
 
   const canvas=wrap.querySelector("canvas");
   const ta=wrap.querySelector("textarea");
   ta.addEventListener("input",()=>{f.desc=ta.value;saveSoon();});
+  const sel=wrap.querySelector(".frase-sel");
+  sel.addEventListener("change",()=>{
+    const v=sel.value;sel.value="";if(!v)return;
+    ta.value=ta.value.trim()?(ta.value.trim()+" "+v):v;
+    f.desc=ta.value;saveSoon();
+  });
 
   const img=new Image();
   img.onload=()=>{ canvas.width=f.w;canvas.height=f.h;
@@ -457,41 +521,50 @@ function zerarTudo(){
 function nl2p(t){return String(t||"").split(/\n{2,}/).map(p=>'<p class="par">'+esc(p).replace(/\n/g,"<br>")+'</p>').join("");}
 async function abrirPreview(){
   const H=state.header,D=state.dados,S=state.sig;
-  let html="";
-  html+='<div class="pg">';
-  html+='<div class="eng"><b>'+esc(H.nome)+'</b><span>'+esc(H.titulo)+'</span><span>'+esc(H.crea)+'</span><span>'+esc(H.email)+'</span><span>'+esc(H.tel)+'</span></div>';
-  html+='<h1>RELATÓRIO DE VISTORIA</h1>';
-  html+='<div class="dados">';
+  const bodies=[];
   const row=(l,v)=>v?('<p>'+l+': '+esc(v)+'</p>'):'';
-  html+=row("Construtora",D.construtora)+row("Empreendimento",D.empreend)+row("Responsável pela vistoria",D.responsavel)
-       +row("Proprietário",D.proprietario)+row("Representante da construtora",D.representante)+row("Unidade",D.unidade)
-       +row("Endereço",D.endereco)+row("Área privativa",D.area)+row("Data da vistoria",D.data)
-       +row("Horário",D.horario)+row("ART",D.art);
-  html+='</div></div>';
 
-  // corpo
-  html+='<div class="pg">';
-  html+=nl2p(state.intro);
+  bodies.push(
+    '<div class="eng"><b>'+esc(H.nome)+'</b><span>'+esc(H.titulo)+'</span><span>'+esc(H.crea)+'</span><span>'+esc(H.email)+'</span><span>'+esc(H.tel)+'</span></div>'+
+    '<h1>RELATÓRIO DE VISTORIA</h1>'+
+    '<div class="dados">'+
+      row("Construtora",D.construtora)+row("Empreendimento",D.empreend)+row("Responsável pela vistoria",D.responsavel)+
+      row("Proprietário",D.proprietario)+row("Representante da construtora",D.representante)+row("Unidade",D.unidade)+
+      row("Endereço",D.endereco)+row("Área privativa",D.area)+row("Data da vistoria",D.data)+
+      row("Horário",D.horario)+row("ART",D.art)+
+    '</div>'
+  );
+
+  bodies.push(nl2p(state.intro));
+
   let n=0;
   for(let ai=0;ai<state.ambientes.length;ai++){
     const amb=state.ambientes[ai];
-    html+='<p class="amb-title">'+(ORD[ai]||(ai+1)+"º")+' Ambiente'+(amb.nome?(' &ndash; '+esc(amb.nome.toUpperCase())):'')+'</p>';
-    for(const f of amb.fotos){
-      n++;
+    const titulo='<p class="amb-title">'+(ORD[ai]||(ai+1)+"º")+' Ambiente'+(amb.nome?(' &ndash; '+esc(amb.nome.toUpperCase())):'')+'</p>';
+    if(!amb.fotos.length){ bodies.push(titulo+'<p class="par"><i>Sem fotos neste ambiente.</i></p>'); continue; }
+    for(let fi=0;fi<amb.fotos.length;fi++){
+      const f=amb.fotos[fi];n++;
       const src=(f.shapes&&f.shapes.length)?await bakedDataUrl(f):f.base;
-      html+='<figure><figcaption><b>Foto '+n+':</b> '+esc(f.desc||"")+'</figcaption>'+
-            '<img src="'+src+'"></figure>';
+      bodies.push((fi===0?titulo:'')+
+        '<figure><figcaption><b>Foto '+n+':</b> '+esc(f.desc||"")+'</figcaption>'+
+        '<img src="'+src+'"></figure>');
     }
   }
-  html+='</div>';
 
-  // considerações
-  html+='<div class="pg">';
-  html+='<p class="amb-title" style="text-decoration:none;text-align:left">CONSIDERAÇÕES FINAIS</p>';
-  html+=nl2p(state.cons);
-  html+='<div class="sig"><p>'+esc(S.local||"São Paulo")+(S.data?(", "+esc(S.data)):", ____ de __________ de ______")+'</p>'+
-        '<b>'+esc(S.nome)+'</b><span>'+esc(S.crea)+'</span></div>';
-  html+='</div>';
+  bodies.push(
+    '<p class="amb-title" style="text-decoration:none;text-align:left">CONSIDERAÇÕES FINAIS</p>'+
+    nl2p(state.cons)+
+    '<div class="sig"><p>'+esc(S.local||"São Paulo")+(S.data?(", "+esc(S.data)):", ____ de __________ de ______")+'</p>'+
+    '<b>'+esc(S.nome)+'</b><span>'+esc(S.crea)+'</span></div>'
+  );
+
+  const total=bodies.length;
+  const ident=esc([D.empreend,D.unidade].filter(Boolean).join(" · "));
+  const html=bodies.map((b,i)=>
+    '<div class="pg"><div class="pg__body">'+b+'</div>'+
+    '<div class="pg__foot"><span><b>MFRAMADAN Engenharia Civil</b> · Relatório de Vistoria'+
+    (ident?(' · '+ident):'')+'</span><span>Página '+(i+1)+' de '+total+'</span></div></div>'
+  ).join("");
 
   document.getElementById("docPages").innerHTML=html;
   document.body.classList.add("doc-on");window.scrollTo(0,0);
@@ -499,8 +572,19 @@ async function abrirPreview(){
 function fecharPreview(){document.body.classList.remove("doc-on");}
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 
+function renderPresets(){
+  const box=document.getElementById("presets");if(!box)return;
+  box.innerHTML='<span style="font-size:12px;color:var(--ink-500);align-self:center;margin-right:4px">Atalhos:</span>';
+  PRESETS.forEach(nome=>{
+    const b=document.createElement("button");
+    b.className="preset";b.type="button";b.textContent="+ "+nome;
+    b.onclick=()=>addAmbiente(nome);
+    box.appendChild(b);
+  });
+}
+
 /* ---------- Init ---------- */
-loadLS();fillFields();bindFields();renderAmbs();
+loadLS();fillFields();bindFields();renderAmbs();renderPresets();
 window.addEventListener("beforeunload",persist);
 </script>
 </body>
