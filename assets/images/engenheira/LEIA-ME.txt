@@ -1,0 +1,20 @@
+FOTOS DA ENGENHEIRA — JÁ INTEGRADAS AO SITE
+============================================
+
+As 4 fotos enviadas já estão sendo usadas no site, com estes nomes:
+
+  marivalda-sobre.jpg     -> seção "Sobre" (retrato sorrindo, com capacete)
+  marivalda-hero.jpg      -> card do topo / hero (com prancheta na porta)
+  marivalda-vistoria.jpg  -> seção "Vistoria de Chaves" (em ação)
+  marivalda-tecnica.jpg   -> reserva (medindo piso) — disponível para uso futuro
+
+COMO TROCAR UMA FOTO
+--------------------
+Substitua o arquivo por outro COM O MESMO NOME (ex.: marivalda-sobre.jpg).
+Mantenha em .jpg, de preferência abaixo de 300 KB
+(comprima em https://squoosh.app se precisar). Faça commit e o site atualiza.
+
+OBSERVAÇÃO
+----------
+Se algum arquivo for removido, o espaço da foto some sozinho no site,
+sem quebrar o layout (cada <img> tem fallback automático).

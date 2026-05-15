@@ -789,14 +789,32 @@ input, select, textarea { font: inherit; color: inherit; }
   border-radius: var(--r-full);
 }
 
-/* Foto da engenheira (some sozinha se o arquivo não existir) */
+/* Fotos da engenheira (somem sozinhas se o arquivo não existir) */
 .about__photo {
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+  object-position: center 20%;
   border-radius: var(--r-lg);
   margin-bottom: 24px;
   border: 1px solid rgba(255,255,255,.12);
+}
+.card-3d__photo {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  object-position: center 25%;
+  border-radius: var(--r-lg);
+  margin: 4px 0 18px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.25);
+}
+.vistoria__photo {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: center 30%;
+  border-radius: var(--r-lg);
+  margin-bottom: 20px;
 }
 
 @media (max-width: 900px) {

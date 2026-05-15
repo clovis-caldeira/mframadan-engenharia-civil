@@ -47,9 +47,15 @@ Site institucional de página única (one-page) construído com **HTML5, CSS3 e 
 
 ### Fotos da engenheira
 
-Coloque os arquivos em `imagens/engenheira/` (veja `LEIA-ME.txt` lá dentro).
-O site usa `marivalda.jpg` na seção "Sobre" — sem o arquivo, o espaço
-some sozinho, sem quebrar o layout.
+Em `assets/images/engenheira/` (veja `LEIA-ME.txt` lá dentro):
+
+- `marivalda-sobre.jpg` → seção "Sobre"
+- `marivalda-hero.jpg` → card do hero
+- `marivalda-vistoria.jpg` → seção "Vistoria de Chaves"
+- `marivalda-tecnica.jpg` → reserva
+
+Cada `<img>` tem fallback (`onerror`) — se um arquivo sumir, o espaço
+desaparece sem quebrar o layout. Para trocar, substitua mantendo o nome.
 
 ## Stack
 
