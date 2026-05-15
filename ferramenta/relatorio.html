@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Gerador de Relatório de Vistoria — MFRAMADAN (uso interno)</title>
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<style>
+  :root{
+    --brand-900:#061a36;--brand-800:#0b2545;--brand-700:#133b7c;--brand-600:#1d4ed8;
+    --brand-100:#dbeafe;--brand-50:#eff6ff;--ink-900:#0a0f1c;--ink-700:#2d3748;
+    --ink-600:#4a5568;--ink-500:#718096;--ink-300:#cbd5e0;--ink-200:#e2e8f0;
+    --ink-100:#edf2f7;--ink-50:#f7fafc;--danger:#dc2626;--ok:#16a34a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;background:var(--ink-100);color:var(--ink-800);line-height:1.5}
+  .topbar{position:sticky;top:0;z-index:20;background:var(--brand-800);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 20px;flex-wrap:wrap}
+  .topbar strong{font-size:15px;letter-spacing:.02em}
+  .topbar small{color:var(--brand-100);display:block;font-size:11px;font-weight:400}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  button{font:inherit;cursor:pointer;border:0;border-radius:8px;padding:9px 16px;font-weight:600;font-size:13px;transition:.15s}
+  .btn-primary{background:#1d4ed8;color:#fff}.btn-primary:hover{background:#1e40af}
+  .btn-ok{background:var(--ok);color:#fff}.btn-ok:hover{filter:brightness(.95)}
+  .btn-soft{background:rgba(255,255,255,.14);color:#fff}.btn-soft:hover{background:rgba(255,255,255,.24)}
+  .btn-ghost{background:#fff;color:var(--brand-700);border:1px solid var(--ink-200)}.btn-ghost:hover{background:var(--brand-50)}
+  .btn-danger{background:#fee2e2;color:var(--danger)}.btn-danger:hover{background:#fecaca}
+  .wrap{max-width:1080px;margin:0 auto;padding:24px 20px 80px}
+  .hint{background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:10px;padding:12px 16px;font-size:13px;margin-bottom:20px}
+  .card{background:#fff;border:1px solid var(--ink-200);border-radius:14px;padding:22px;margin-bottom:18px}
+  .card h2{font-size:15px;color:var(--brand-800);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .card .sub{font-size:12px;color:var(--ink-500);margin-bottom:16px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:600;color:var(--ink-700)}
+  input,textarea{font:inherit;font-size:14px;color:var(--ink-900);background:#fff;border:1.5px solid var(--ink-200);border-radius:8px;padding:10px 12px;width:100%}
+  input:focus,textarea:focus{outline:0;border-color:var(--brand-600);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+  textarea{resize:vertical;min-height:80px;line-height:1.5}
+  .full{grid-column:1/-1}
+  .amb{border:1px solid var(--ink-200);border-radius:12px;margin-bottom:16px;overflow:hidden}
+  .amb__head{background:var(--ink-50);padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--ink-200);flex-wrap:wrap}
+  .amb__head .ord{background:var(--brand-700);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap}
+  .amb__head input{flex:1;min-width:180px}
+  .amb__body{padding:16px}
+  .photo{border:1px solid var(--ink-200);border-radius:10px;padding:14px;margin-bottom:14px;background:var(--ink-50)}
+  .photo__top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+  .photo__num{font-weight:700;color:var(--brand-700);font-size:13px}
+  .photo__tools{display:flex;gap:6px;flex-wrap:wrap}
+  .tool{padding:6px 11px;font-size:12px;border-radius:7px;background:#fff;border:1px solid var(--ink-200);color:var(--ink-700)}
+  .tool.active{background:var(--danger);color:#fff;border-color:var(--danger)}
+  .canvas-box{position:relative;background:#fff;border:1px dashed var(--ink-300);border-radius:8px;display:flex;justify-content:center;align-items:center;min-height:120px;overflow:auto}
+  .canvas-box canvas{max-width:100%;touch-action:none;display:block}
+  .photo textarea{margin-top:10px;background:#fff}
+  .add-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .empty{color:var(--ink-500);font-size:13px;text-align:center;padding:20px}
+  .file-lbl{display:inline-flex;align-items:center;gap:6px;background:var(--brand-50);color:var(--brand-700);border:1px solid var(--brand-100);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
+  .file-lbl input{display:none}
+  .save-state{font-size:11px;color:var(--brand-100)}
+  /* ===== Documento (preview/print) ===== */
+  #doc{display:none}
+  .doc-on #editor{display:none}
+  .doc-on #doc{display:block;background:var(--ink-100);padding:24px 0}
+  .doc-bar{position:sticky;top:0;z-index:20;background:var(--brand-800);color:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 20px;flex-wrap:wrap;gap:10px}
+  .pg{width:210mm;min-height:297mm;background:#fff;margin:0 auto 22px;padding:18mm 20mm;box-shadow:0 8px 30px rgba(0,0,0,.12);color:#111;font-size:11.5pt;font-family:'Times New Roman',Georgia,serif}
+  .pg .eng{display:flex;flex-direction:column;gap:1px;font-size:10pt;line-height:1.35;margin-bottom:30px}
+  .pg .eng b{font-size:11pt}
+  .pg h1{text-align:center;font-size:19pt;letter-spacing:.06em;margin:60px 0 70px;font-family:Arial,sans-serif;font-weight:700}
+  .pg .dados p{font-weight:700;font-size:11.5pt;margin:2px 0}
+  .pg .par{margin:0 0 12px;text-align:justify}
+  .pg .amb-title{font-weight:700;text-decoration:underline;margin:22px 0 14px;font-size:12pt}
+  .pg figure{margin:0 0 18px;page-break-inside:avoid;break-inside:avoid}
+  .pg figcaption{margin-bottom:8px;text-align:justify}
+  .pg figcaption b{font-weight:700}
+  .pg figure img{display:block;max-width:78%;max-height:165mm;margin:0 auto;border:1px solid #ddd}
+  .pg .sig{margin-top:60px}
+  .pg .sig b{display:block;margin-top:34px}
+  @media print{
+    body{background:#fff}
+    .topbar,.doc-bar,#editor,.hint{display:none!important}
+    #doc{display:block!important;background:#fff;padding:0}
+    .pg{width:auto;min-height:auto;margin:0;padding:14mm 16mm;box-shadow:none;page-break-after:always}
+    .pg:last-child{page-break-after:auto}
+    @page{size:A4;margin:0}
+  }
+  @media(max-width:760px){.grid,.grid-3{grid-template-columns:1fr}.pg{width:100%;padding:14mm}}
+</style>
+</head>
+<body>
+
+<div id="editor">
+  <div class="topbar">
+    <div><strong>Gerador de Relatório de Vistoria</strong><small>Ferramenta interna — MFRAMADAN Engenharia Civil</small></div>
+    <div class="actions">
+      <span class="save-state" id="saveState">salvo automaticamente</span>
+      <button class="btn-soft" onclick="exportarRascunho()">💾 Salvar rascunho</button>
+      <label class="btn-soft" style="display:inline-flex;align-items:center" >📂 Abrir rascunho
+        <input type="file" accept="application/json" style="display:none" onchange="importarRascunho(this)">
+      </label>
+      <button class="btn-ok" onclick="abrirPreview()">👁️ Gerar relatório</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="hint">
+      <strong>Como usar:</strong> preencha os dados, adicione ambientes e fotos, descreva cada foto e use as ferramentas
+      <b>Seta</b>/<b>Círculo</b> (vermelho) para marcar as não conformidades sobre a imagem. Ao terminar, clique em
+      <b>“Gerar relatório”</b> e depois em <b>“Salvar PDF”</b> (impressão → destino “Salvar como PDF”).
+      Use <b>“Salvar rascunho”</b> para guardar o trabalho num arquivo e continuar depois (inclui as fotos).
+    </div>
+
+    <div class="card">
+      <h2>1 · Cabeçalho (engenheira)</h2>
+      <p class="sub">Aparece no topo da primeira página. Já vem preenchido — ajuste se precisar.</p>
+      <div class="grid">
+        <label class="full">Nome<input id="h_nome"></label>
+        <label>Título profissional<input id="h_titulo"></label>
+        <label>CREA<input id="h_crea"></label>
+        <label>E-mail<input id="h_email"></label>
+        <label>Telefone<input id="h_tel"></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2 · Dados da vistoria</h2>
+      <p class="sub">Bloco de identificação na capa do relatório.</p>
+      <div class="grid">
+        <label>Construtora<input id="d_construtora"></label>
+        <label>Empreendimento<input id="d_empreend"></label>
+        <label class="full">Responsável pela vistoria<input id="d_responsavel"></label>
+        <label>Proprietário<input id="d_proprietario"></label>
+        <label>Representante da construtora<input id="d_representante"></label>
+        <label>Unidade<input id="d_unidade"></label>
+        <label>Endereço (Rua, nº)<input id="d_endereco"></label>
+        <label>Área privativa<input id="d_area" placeholder="Ex.: 69,11 m²"></label>
+        <label>Data da vistoria<input id="d_data" placeholder="Ex.: 10/05/2026"></label>
+        <label>Horário<input id="d_horario" placeholder="Ex.: 14h00"></label>
+        <label>ART<input id="d_art"></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3 · Texto de introdução</h2>
+      <p class="sub">Parágrafo padrão antes dos ambientes (editável).</p>
+      <textarea id="introTxt" style="min-height:120px"></textarea>
+    </div>
+
+    <div class="card">
+      <h2>4 · Ambientes e fotos</h2>
+      <p class="sub">As fotos são numeradas automaticamente (Foto 1, 2, 3…) na ordem dos ambientes.</p>
+      <div id="ambs"></div>
+      <button class="btn-primary" onclick="addAmbiente()">+ Adicionar ambiente</button>
+    </div>
+
+    <div class="card">
+      <h2>5 · Considerações finais</h2>
+      <p class="sub">Texto de encerramento (editável).</p>
+      <textarea id="consTxt" style="min-height:200px"></textarea>
+      <div class="grid" style="margin-top:14px">
+        <label>Local<input id="s_local" placeholder="São Paulo"></label>
+        <label>Data do relatório<input id="s_data" placeholder="Ex.: 12 de maio de 2026"></label>
+        <label>Assinatura — nome<input id="s_nome"></label>
+        <label>Assinatura — CREA<input id="s_crea"></label>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn-ok" onclick="abrirPreview()">👁️ Gerar relatório</button>
+      <button class="btn-danger" onclick="zerarTudo()">🗑️ Limpar tudo</button>
+    </div>
+  </div>
+</div>
+
+<div id="doc">
+  <div class="doc-bar">
+    <button class="btn-ghost" onclick="fecharPreview()">← Voltar a editar</button>
+    <strong style="color:#fff">Pré-visualização do relatório</strong>
+    <button class="btn-ok" onclick="window.print()">🖨️ Salvar PDF / Imprimir</button>
+  </div>
+  <div id="docPages"></div>
+</div>
+
+<script>
+"use strict";
+const LS_KEY = "mframadan_relatorio_v1";
+const ORD = ["Primeiro","Segundo","Terceiro","Quarto","Quinto","Sexto","Sétimo","Oitavo","Nono","Décimo",
+"Décimo primeiro","Décimo segundo","Décimo terceiro","Décimo quarto","Décimo quinto","Décimo sexto",
+"Décimo sétimo","Décimo oitavo","Décimo nono","Vigésimo"];
+
+const INTRO_PADRAO =
+"A vistoria foi realizada pela responsável técnica, com a presença do proprietário da unidade e do representante da construtora.\n\n"+
+"A inspeção visual teve por objetivo verificar as condições aparentes das instalações e dos acabamentos, em conformidade com as normas técnicas aplicáveis, o Memorial Descritivo e o Projeto Executivo, sendo identificadas as não conformidades descritas a seguir, organizadas por ambiente e devidamente ilustradas nas fotografias correspondentes:";
+
+const CONS_PADRAO =
+"Devido à ausência de fornecimento de energia elétrica no apartamento no momento da vistoria, restou impossibilitada a verificação do funcionamento das tomadas, interruptores e demais pontos do sistema elétrico.\n\n"+
+"Constatou-se a ausência das chaves das portas internas, o que inviabilizou a realização dos testes funcionais dos respectivos elementos.\n\n"+
+"O representante da construtora, presente no ato da vistoria, declarou ciência das não conformidades apontadas pela responsável técnica, na presença do proprietário, comprometendo-se com a execução dos reparos necessários, com início imediato das intervenções. Ficou acordada a realização de nova vistoria para aferição e validação das correções executadas, previamente à entrega definitiva das chaves.\n\n"+
+"Recomenda-se a adoção das medidas corretivas necessárias, especialmente quanto aos serviços de acabamento, escoamento de águas, instalação de revestimentos e ajustes dos elementos construtivos, em conformidade com as normas técnicas aplicáveis, o Memorial Descritivo e o Projeto Executivo do empreendimento.\n\n"+
+"O presente laudo restringe-se às condições aparentes observadas na data da vistoria, não contemplando elementos ocultos, estruturais ou não acessíveis no momento da inspeção.\n\n"+
+"Ressalta-se que a adequada execução das correções indicadas é imprescindível para assegurar o desempenho, a durabilidade e a funcionalidade dos sistemas construtivos, bem como para prevenir o surgimento de manifestações patológicas futuras.";
+
+let state = blankState();
+function blankState(){
+  return {
+    header:{nome:"Marivalda Nascimento",titulo:"Engenheira Civil",crea:"CREA 5071239135",
+            email:"mframadantriunfo@gmail.com",tel:"(11) 98952-0479"},
+    dados:{construtora:"",empreend:"",responsavel:"Marivalda Rocha de Andrade Nascimento",
+           proprietario:"",representante:"",unidade:"",endereco:"",area:"",data:"",horario:"",art:""},
+    intro:INTRO_PADRAO,
+    ambientes:[],
+    cons:CONS_PADRAO,
+    sig:{local:"São Paulo",data:"",nome:"Marivalda Rocha de Andrade Nascimento",crea:"CREA 5071239135"}
+  };
+}
+const uid=()=>Math.random().toString(36).slice(2,9);
+
+/* ---------- Bind dos campos simples ---------- */
+const FIELD_MAP = {
+  h_nome:["header","nome"],h_titulo:["header","titulo"],h_crea:["header","crea"],h_email:["header","email"],h_tel:["header","tel"],
+  d_construtora:["dados","construtora"],d_empreend:["dados","empreend"],d_responsavel:["dados","responsavel"],
+  d_proprietario:["dados","proprietario"],d_representante:["dados","representante"],d_unidade:["dados","unidade"],
+  d_endereco:["dados","endereco"],d_area:["dados","area"],d_data:["dados","data"],d_horario:["dados","horario"],d_art:["dados","art"],
+  s_local:["sig","local"],s_data:["sig","data"],s_nome:["sig","nome"],s_crea:["sig","crea"]
+};
+function fillFields(){
+  for(const id in FIELD_MAP){const[g,k]=FIELD_MAP[id];const el=document.getElementById(id);if(el)el.value=state[g][k]||"";}
+  document.getElementById("introTxt").value=state.intro;
+  document.getElementById("consTxt").value=state.cons;
+}
+function bindFields(){
+  for(const id in FIELD_MAP){
+    document.getElementById(id).addEventListener("input",e=>{
+      const[g,k]=FIELD_MAP[id];state[g][k]=e.target.value;saveSoon();
+    });
+  }
+  document.getElementById("introTxt").addEventListener("input",e=>{state.intro=e.target.value;saveSoon();});
+  document.getElementById("consTxt").addEventListener("input",e=>{state.cons=e.target.value;saveSoon();});
+}
+
+/* ---------- Ambientes ---------- */
+function addAmbiente(nome){
+  state.ambientes.push({id:uid(),nome:nome||"",fotos:[]});
+  renderAmbs();saveSoon();
+}
+function removeAmbiente(id){
+  if(!confirm("Remover este ambiente e todas as suas fotos?"))return;
+  state.ambientes=state.ambientes.filter(a=>a.id!==id);renderAmbs();saveSoon();
+}
+function moveAmb(id,dir){
+  const i=state.ambientes.findIndex(a=>a.id===id);const j=i+dir;
+  if(j<0||j>=state.ambientes.length)return;
+  [state.ambientes[i],state.ambientes[j]]=[state.ambientes[j],state.ambientes[i]];
+  renderAmbs();saveSoon();
+}
+function renderAmbs(){
+  const box=document.getElementById("ambs");box.innerHTML="";
+  if(!state.ambientes.length){box.innerHTML='<div class="empty">Nenhum ambiente ainda. Clique em “Adicionar ambiente”.</div>';}
+  let fotoN=0;
+  state.ambientes.forEach((amb,ai)=>{
+    const d=document.createElement("div");d.className="amb";
+    d.innerHTML=
+      '<div class="amb__head">'+
+        '<span class="ord">'+(ORD[ai]||(ai+1)+"º")+' Ambiente</span>'+
+        '<input placeholder="Nome do ambiente (ex.: ESTAR/APA, TERRAÇO, BANHEIRO)" value="'+esc(amb.nome)+'">'+
+        '<button class="tool" title="Subir" onclick="moveAmb(\''+amb.id+'\',-1)">↑</button>'+
+        '<button class="tool" title="Descer" onclick="moveAmb(\''+amb.id+'\',1)">↓</button>'+
+        '<button class="tool" style="color:#dc2626" onclick="removeAmbiente(\''+amb.id+'\')">Remover</button>'+
+      '</div>'+
+      '<div class="amb__body"><div class="fotos"></div>'+
+        '<div class="add-row"><label class="file-lbl">📷 Adicionar foto(s)'+
+        '<input type="file" accept="image/*" multiple></label></div>'+
+      '</div>';
+    d.querySelector(".amb__head input").addEventListener("input",e=>{amb.nome=e.target.value;saveSoon();});
+    d.querySelector(".file-lbl input").addEventListener("change",e=>handleFiles(e.target,amb.id));
+    const fb=d.querySelector(".fotos");
+    amb.fotos.forEach(f=>{fotoN++;fb.appendChild(renderFoto(amb,f,fotoN));});
+    box.appendChild(d);
+  });
+}
+
+/* ---------- Fotos: upload + downscale + orientação ---------- */
+function handleFiles(input,ambId){
+  const amb=state.ambientes.find(a=>a.id===ambId);if(!amb)return;
+  const files=[...input.files];input.value="";
+  let pending=files.length;
+  files.forEach(file=>{
+    downscale(file).then(o=>{
+      amb.fotos.push({id:uid(),desc:"",base:o.dataUrl,w:o.w,h:o.h,shapes:[]});
+      if(--pending===0){renderAmbs();saveSoon();}
+    }).catch(()=>{ if(--pending===0){renderAmbs();saveSoon();} });
+  });
+}
+function downscale(file){
+  return new Promise((res,rej)=>{
+    const MAX=1500;
+    const draw=(bmp,w,h)=>{
+      let nw=w,nh=h;
+      if(Math.max(w,h)>MAX){const r=MAX/Math.max(w,h);nw=Math.round(w*r);nh=Math.round(h*r);}
+      const c=document.createElement("canvas");c.width=nw;c.height=nh;
+      c.getContext("2d").drawImage(bmp,0,0,nw,nh);
+      res({dataUrl:c.toDataURL("image/jpeg",0.82),w:nw,h:nh});
+    };
+    if(window.createImageBitmap){
+      createImageBitmap(file,{imageOrientation:"from-image"})
+        .then(bmp=>draw(bmp,bmp.width,bmp.height))
+        .catch(()=>fallback());
+    } else fallback();
+    function fallback(){
+      const img=new Image();const u=URL.createObjectURL(file);
+      img.onload=()=>{draw(img,img.naturalWidth,img.naturalHeight);URL.revokeObjectURL(u);};
+      img.onerror=()=>{URL.revokeObjectURL(u);rej();};img.src=u;
+    }
+  });
+}
+
+/* ---------- Foto card + anotação (seta/círculo) ---------- */
+function renderFoto(amb,f,n){
+  const wrap=document.createElement("div");wrap.className="photo";
+  wrap.dataset.tool="arrow";
+  wrap.innerHTML=
+    '<div class="photo__top">'+
+      '<span class="photo__num">Foto '+n+'</span>'+
+      '<div class="photo__tools">'+
+        '<button class="tool active" data-t="arrow">➤ Seta</button>'+
+        '<button class="tool" data-t="ellipse">◯ Círculo</button>'+
+        '<button class="tool" data-t="undo">↶ Desfazer</button>'+
+        '<button class="tool" data-t="clear">Limpar</button>'+
+        '<button class="tool" data-t="up">↑</button>'+
+        '<button class="tool" data-t="down">↓</button>'+
+        '<button class="tool" data-t="del" style="color:#dc2626">Excluir</button>'+
+      '</div>'+
+    '</div>'+
+    '<div class="canvas-box"><canvas></canvas></div>'+
+    '<textarea placeholder="Descrição da não conformidade (vira a legenda: “Foto '+n+': …”)">'+esc(f.desc)+'</textarea>';
+
+  const canvas=wrap.querySelector("canvas");
+  const ta=wrap.querySelector("textarea");
+  ta.addEventListener("input",()=>{f.desc=ta.value;saveSoon();});
+
+  const img=new Image();
+  img.onload=()=>{ canvas.width=f.w;canvas.height=f.h;
+    const box=wrap.querySelector(".canvas-box");
+    const maxW=Math.min(box.clientWidth-2,720)||720;
+    const scale=Math.min(1,maxW/f.w);
+    canvas.style.width=(f.w*scale)+"px";canvas.style.height=(f.h*scale)+"px";
+    f._img=img;redraw(canvas,f);
+  };
+  img.src=f.base;
+
+  wrap.querySelectorAll(".tool").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const t=b.dataset.t;
+      if(t==="arrow"||t==="ellipse"){
+        wrap.dataset.tool=t;
+        wrap.querySelectorAll('.tool[data-t]').forEach(x=>{ if(x.dataset.t==="arrow"||x.dataset.t==="ellipse")x.classList.toggle("active",x===b);});
+      } else if(t==="undo"){ f.shapes.pop();redraw(canvas,f);saveSoon(); }
+      else if(t==="clear"){ f.shapes=[];redraw(canvas,f);saveSoon(); }
+      else if(t==="del"){ if(confirm("Excluir esta foto?")){amb.fotos=amb.fotos.filter(x=>x.id!==f.id);renderAmbs();saveSoon();} }
+      else if(t==="up"||t==="down"){
+        const i=amb.fotos.findIndex(x=>x.id===f.id);const j=i+(t==="up"?-1:1);
+        if(j>=0&&j<amb.fotos.length){[amb.fotos[i],amb.fotos[j]]=[amb.fotos[j],amb.fotos[i]];renderAmbs();saveSoon();}
+      }
+    });
+  });
+
+  // desenhar
+  let drawing=false,sx=0,sy=0;
+  const pos=e=>{const r=canvas.getBoundingClientRect();
+    return {x:(e.clientX-r.left)*(canvas.width/r.width),y:(e.clientY-r.top)*(canvas.height/r.height)};};
+  canvas.addEventListener("pointerdown",e=>{drawing=true;const p=pos(e);sx=p.x;sy=p.y;canvas.setPointerCapture(e.pointerId);});
+  canvas.addEventListener("pointermove",e=>{ if(!drawing)return;const p=pos(e);
+    redraw(canvas,f);drawShape(canvas.getContext("2d"),{type:wrap.dataset.tool,x1:sx,y1:sy,x2:p.x,y2:p.y},canvas.width);});
+  canvas.addEventListener("pointerup",e=>{ if(!drawing)return;drawing=false;const p=pos(e);
+    if(Math.hypot(p.x-sx,p.y-sy)>8){f.shapes.push({type:wrap.dataset.tool,x1:sx,y1:sy,x2:p.x,y2:p.y});saveSoon();}
+    redraw(canvas,f);});
+  return wrap;
+}
+function redraw(canvas,f){
+  const ctx=canvas.getContext("2d");
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(f._img)ctx.drawImage(f._img,0,0,canvas.width,canvas.height);
+  f.shapes.forEach(s=>drawShape(ctx,s,canvas.width));
+}
+function drawShape(ctx,s,refW){
+  const lw=Math.max(3,Math.round(refW/180));
+  ctx.strokeStyle="#ff1a1a";ctx.fillStyle="#ff1a1a";ctx.lineWidth=lw;ctx.lineCap="round";
+  if(s.type==="ellipse"){
+    ctx.beginPath();
+    ctx.ellipse((s.x1+s.x2)/2,(s.y1+s.y2)/2,Math.abs(s.x2-s.x1)/2,Math.abs(s.y2-s.y1)/2,0,0,Math.PI*2);
+    ctx.stroke();
+  } else {
+    ctx.beginPath();ctx.moveTo(s.x1,s.y1);ctx.lineTo(s.x2,s.y2);ctx.stroke();
+    const a=Math.atan2(s.y2-s.y1,s.x2-s.x1),h=lw*4;
+    ctx.beginPath();ctx.moveTo(s.x2,s.y2);
+    ctx.lineTo(s.x2-h*Math.cos(a-Math.PI/7),s.y2-h*Math.sin(a-Math.PI/7));
+    ctx.lineTo(s.x2-h*Math.cos(a+Math.PI/7),s.y2-h*Math.sin(a+Math.PI/7));
+    ctx.closePath();ctx.fill();
+  }
+}
+function bakedDataUrl(f){
+  const c=document.createElement("canvas");c.width=f.w;c.height=f.h;
+  const ctx=c.getContext("2d");
+  return new Promise(res=>{
+    const im=new Image();
+    im.onload=()=>{ctx.drawImage(im,0,0,f.w,f.h);f.shapes.forEach(s=>drawShape(ctx,s,f.w));res(c.toDataURL("image/jpeg",0.85));};
+    im.src=f.base;
+  });
+}
+
+/* ---------- Persistência ---------- */
+let saveTimer=null;
+function saveSoon(){clearTimeout(saveTimer);setStateMsg("salvando…");saveTimer=setTimeout(persist,600);}
+function persist(){
+  try{ localStorage.setItem(LS_KEY,JSON.stringify(state));setStateMsg("salvo automaticamente"); }
+  catch(e){ try{ const lite=JSON.parse(JSON.stringify(state));
+      lite.ambientes.forEach(a=>a.fotos.forEach(f=>{f.base="";f.shapes=[];}));
+      localStorage.setItem(LS_KEY,JSON.stringify(lite));
+      setStateMsg("⚠ texto salvo (fotos grandes — use Salvar rascunho)"); }catch(_){ setStateMsg("⚠ não foi possível salvar"); } }
+}
+function setStateMsg(t){const e=document.getElementById("saveState");if(e)e.textContent=t;}
+function loadLS(){
+  try{const r=localStorage.getItem(LS_KEY);if(r){const o=JSON.parse(r);
+    state=Object.assign(blankState(),o);
+    state.header=Object.assign(blankState().header,o.header||{});
+    state.dados=Object.assign(blankState().dados,o.dados||{});
+    state.sig=Object.assign(blankState().sig,o.sig||{});
+    state.ambientes=(o.ambientes||[]).map(a=>({id:a.id||uid(),nome:a.nome||"",
+      fotos:(a.fotos||[]).map(f=>({id:f.id||uid(),desc:f.desc||"",base:f.base||"",w:f.w||1000,h:f.h||750,shapes:f.shapes||[]}))}));
+  }}catch(e){}
+}
+function exportarRascunho(){
+  const blob=new Blob([JSON.stringify(state)],{type:"application/json"});
+  const a=document.createElement("a");
+  const nome=(state.dados.unidade||state.dados.empreend||"relatorio").replace(/[^\w\-]+/g,"_").slice(0,40);
+  a.href=URL.createObjectURL(blob);a.download="rascunho_"+nome+".json";a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+function importarRascunho(input){
+  const file=input.files[0];if(!file)return;
+  const fr=new FileReader();
+  fr.onload=()=>{ try{ const o=JSON.parse(fr.result);
+    state=Object.assign(blankState(),o);
+    state.header=Object.assign(blankState().header,o.header||{});
+    state.dados=Object.assign(blankState().dados,o.dados||{});
+    state.sig=Object.assign(blankState().sig,o.sig||{});
+    state.ambientes=(o.ambientes||[]).map(a=>({id:a.id||uid(),nome:a.nome||"",
+      fotos:(a.fotos||[]).map(f=>({id:f.id||uid(),desc:f.desc||"",base:f.base||"",w:f.w||1000,h:f.h||750,shapes:f.shapes||[]}))}));
+    fillFields();renderAmbs();persist();alert("Rascunho carregado com sucesso.");
+  }catch(e){alert("Arquivo inválido.");} input.value="";};
+  fr.readAsText(file);
+}
+function zerarTudo(){
+  if(!confirm("Apagar TODO o relatório atual e começar do zero?"))return;
+  state=blankState();fillFields();renderAmbs();persist();
+}
+
+/* ---------- Preview / impressão ---------- */
+function nl2p(t){return String(t||"").split(/\n{2,}/).map(p=>'<p class="par">'+esc(p).replace(/\n/g,"<br>")+'</p>').join("");}
+async function abrirPreview(){
+  const H=state.header,D=state.dados,S=state.sig;
+  let html="";
+  html+='<div class="pg">';
+  html+='<div class="eng"><b>'+esc(H.nome)+'</b><span>'+esc(H.titulo)+'</span><span>'+esc(H.crea)+'</span><span>'+esc(H.email)+'</span><span>'+esc(H.tel)+'</span></div>';
+  html+='<h1>RELATÓRIO DE VISTORIA</h1>';
+  html+='<div class="dados">';
+  const row=(l,v)=>v?('<p>'+l+': '+esc(v)+'</p>'):'';
+  html+=row("Construtora",D.construtora)+row("Empreendimento",D.empreend)+row("Responsável pela vistoria",D.responsavel)
+       +row("Proprietário",D.proprietario)+row("Representante da construtora",D.representante)+row("Unidade",D.unidade)
+       +row("Endereço",D.endereco)+row("Área privativa",D.area)+row("Data da vistoria",D.data)
+       +row("Horário",D.horario)+row("ART",D.art);
+  html+='</div></div>';
+
+  // corpo
+  html+='<div class="pg">';
+  html+=nl2p(state.intro);
+  let n=0;
+  for(let ai=0;ai<state.ambientes.length;ai++){
+    const amb=state.ambientes[ai];
+    html+='<p class="amb-title">'+(ORD[ai]||(ai+1)+"º")+' Ambiente'+(amb.nome?(' &ndash; '+esc(amb.nome.toUpperCase())):'')+'</p>';
+    for(const f of amb.fotos){
+      n++;
+      const src=(f.shapes&&f.shapes.length)?await bakedDataUrl(f):f.base;
+      html+='<figure><figcaption><b>Foto '+n+':</b> '+esc(f.desc||"")+'</figcaption>'+
+            '<img src="'+src+'"></figure>';
+    }
+  }
+  html+='</div>';
+
+  // considerações
+  html+='<div class="pg">';
+  html+='<p class="amb-title" style="text-decoration:none;text-align:left">CONSIDERAÇÕES FINAIS</p>';
+  html+=nl2p(state.cons);
+  html+='<div class="sig"><p>'+esc(S.local||"São Paulo")+(S.data?(", "+esc(S.data)):", ____ de __________ de ______")+'</p>'+
+        '<b>'+esc(S.nome)+'</b><span>'+esc(S.crea)+'</span></div>';
+  html+='</div>';
+
+  document.getElementById("docPages").innerHTML=html;
+  document.body.classList.add("doc-on");window.scrollTo(0,0);
+}
+function fecharPreview(){document.body.classList.remove("doc-on");}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+
+/* ---------- Init ---------- */
+loadLS();fillFields();bindFields();renderAmbs();
+window.addEventListener("beforeunload",persist);
+</script>
+</body>
+</html>

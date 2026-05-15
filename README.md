@@ -23,9 +23,33 @@ Site institucional de página única (one-page) construído com **HTML5, CSS3 e 
 - Emissão de ART
 - Laudos Técnicos
 - Responsabilidade Técnica para Empresas
+- Vistoria de Recebimento de Chaves
 - Acompanhamento de Obras
 - Consultorias
 - Projetos
+
+### Páginas/seções de captação (nicho apartamento novo)
+
+- `#vistoria` — Vistoria de recebimento de chaves (antes de assinar)
+- `#reforma` — ART/laudo para reforma em condomínio (NBR 16280)
+- `checklist-reforma.html` — lead magnet (PDF imprimível)
+
+### Ferramenta interna (NÃO linkada publicamente, `noindex`)
+
+- **`ferramenta/relatorio.html`** — Gerador de Relatório de Vistoria
+  - Dados da vistoria + ambientes + fotos numeradas automaticamente
+  - Anotação na foto: seta e círculo vermelhos (igual ao modelo)
+  - Redução automática das imagens + correção de orientação
+  - Salvar/abrir rascunho em `.json` (inclui as fotos) + autosave
+  - Exporta PDF pela impressão do navegador (layout A4)
+  - URL de uso: `https://mframadan.vercel.app/ferramenta/relatorio.html`
+    (guardar nos favoritos — clientes não veem, não aparece no Google)
+
+### Fotos da engenheira
+
+Coloque os arquivos em `imagens/engenheira/` (veja `LEIA-ME.txt` lá dentro).
+O site usa `marivalda.jpg` na seção "Sobre" — sem o arquivo, o espaço
+some sozinho, sem quebrar o layout.
 
 ## Stack
 

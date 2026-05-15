@@ -663,6 +663,148 @@ input, select, textarea { font: inherit; color: inherit; }
   .reforma__leadmag-cta { width: 100%; justify-content: center; }
 }
 
+/* ====== VISTORIA DE CHAVES (nicho) ====== */
+.vistoria {
+  background:
+    radial-gradient(700px 320px at 0% 0%, rgba(220, 38, 38, .06), transparent 60%),
+    radial-gradient(700px 320px at 100% 100%, rgba(29, 78, 216, .07), transparent 60%),
+    #ffffff;
+}
+.badge--alert {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  color: #991b1b;
+  border-color: #fca5a5;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, .2);
+}
+.badge__dot--alert {
+  background: #dc2626;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, .25);
+}
+.vistoria__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-bottom: 40px;
+}
+.vistoria__card {
+  background: var(--white);
+  border: 1px solid var(--ink-200);
+  border-radius: var(--r-xl);
+  padding: 30px 26px;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--t-base), box-shadow var(--t-base);
+}
+.vistoria__card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+.vistoria__ic {
+  width: 52px; height: 52px;
+  border-radius: var(--r-md);
+  background: linear-gradient(135deg, var(--brand-50), var(--brand-100));
+  color: var(--brand-700);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 18px;
+}
+.vistoria__card h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--ink-900);
+  margin-bottom: 8px;
+}
+.vistoria__card p { color: var(--ink-600); font-size: .95rem; }
+
+.vistoria__split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: stretch;
+}
+.vistoria__pain {
+  background: var(--ink-50);
+  border: 1px solid var(--ink-200);
+  border-top: 4px solid #fca5a5;
+  border-radius: var(--r-xl);
+  padding: 32px;
+}
+.vistoria__pain h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: #991b1b;
+  margin-bottom: 20px;
+}
+.vistoria__pain ul { display: flex; flex-direction: column; gap: 14px; }
+.vistoria__pain li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--ink-700);
+  font-size: .96rem;
+  line-height: 1.45;
+}
+.vistoria__cta {
+  background: linear-gradient(135deg, var(--brand-800), var(--brand-900));
+  color: var(--white);
+  border-radius: var(--r-xl);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.vistoria__cta::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(500px 200px at 100% 0%, rgba(96,165,250,.22), transparent 60%);
+  pointer-events: none;
+}
+.vistoria__cta > * { position: relative; }
+.vistoria__cta h3 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+.vistoria__cta p { color: var(--ink-300); font-size: .96rem; margin-bottom: 20px; }
+.vistoria__note {
+  margin-top: 16px;
+  font-size: .82rem;
+  color: var(--ink-400);
+}
+
+/* Card de serviço em destaque */
+.service--featured {
+  border-color: var(--brand-300);
+  box-shadow: 0 12px 30px rgba(29, 78, 216, .12);
+  position: relative;
+}
+.service--featured::before { opacity: 1; }
+.service__tag {
+  position: absolute;
+  top: 16px; right: 16px;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #92400e;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: var(--r-full);
+}
+
+/* Foto da engenheira (some sozinha se o arquivo não existir) */
+.about__photo {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--r-lg);
+  margin-bottom: 24px;
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+@media (max-width: 900px) {
+  .vistoria__grid { grid-template-columns: 1fr; gap: 16px; }
+  .vistoria__split { grid-template-columns: 1fr; }
+  .vistoria__pain, .vistoria__cta { padding: 24px; }
+}
+
 /* ====== TRUSTBAR ====== */
 .trustbar {
   background: var(--ink-50);

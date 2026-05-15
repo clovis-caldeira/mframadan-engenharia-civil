@@ -1,0 +1,30 @@
+COMO ADICIONAR AS FOTOS DA ENGENHEIRA
+=====================================
+
+Coloque os arquivos de imagem NESTA pasta (imagens/engenheira/) com
+EXATAMENTE estes nomes:
+
+1) marivalda.jpg
+   - Foto principal (usada na seção "Sobre" do site)
+   - Recomendado: foto vertical ou quadrada, rosto/busto, fundo neutro
+   - Tamanho ideal: ~800 x 1000 px (retrato) ou 800 x 800 px (quadrada)
+   - Formato: .jpg (se for .png, renomeie a referência no index.html)
+
+2) marivalda-hero.jpg  (OPCIONAL)
+   - Segunda foto, usada no card do topo (hero)
+   - Pode ser a mesma de cima se quiser
+
+DICAS
+-----
+- Use foto profissional, boa iluminação, sorrindo (passa confiança).
+- Evite fotos muito escuras ou com fundo poluído.
+- Se possível, com capacete/colete ou em ambiente de obra (reforça autoridade).
+- Comprima a imagem antes (https://squoosh.app) para o site carregar rápido.
+  Deixe cada foto com menos de 300 KB.
+
+IMPORTANTE
+----------
+Enquanto a foto NÃO estiver aqui, o site continua funcionando normalmente
+(o espaço da foto simplesmente não aparece — sem erro, sem quebra).
+Assim que você colocar o arquivo com o nome correto e publicar, a foto
+aparece automaticamente.
