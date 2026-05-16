@@ -59,6 +59,8 @@
   .add-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
   .empty{color:var(--ink-500);font-size:13px;text-align:center;padding:20px}
   .file-lbl{display:inline-flex;align-items:center;gap:6px;background:var(--brand-50);color:var(--brand-700);border:1px solid var(--brand-100);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
+  .file-lbl--cam{background:#1d4ed8;color:#fff;border-color:#1d4ed8}
+  .file-lbl--cam:hover{background:#1e40af}
   .file-lbl input{display:none}
   .save-state{font-size:11px;color:var(--brand-100)}
   /* ===== Documento (preview/print) ===== */
@@ -316,11 +318,15 @@ function renderAmbs(){
         '<button class="tool" style="color:#dc2626" onclick="removeAmbiente(\''+amb.id+'\')">Remover</button>'+
       '</div>'+
       '<div class="amb__body"><div class="fotos"></div>'+
-        '<div class="add-row"><label class="file-lbl">📷 Adicionar foto(s)'+
-        '<input type="file" accept="image/*" multiple></label></div>'+
+        '<div class="add-row">'+
+          '<label class="file-lbl file-lbl--cam">📷 Tirar foto'+
+          '<input type="file" accept="image/*" capture="environment"></label>'+
+          '<label class="file-lbl">🖼️ Enviar da galeria'+
+          '<input type="file" accept="image/*" multiple></label>'+
+        '</div>'+
       '</div>';
     d.querySelector(".amb__head input").addEventListener("input",e=>{amb.nome=e.target.value;saveSoon();});
-    d.querySelector(".file-lbl input").addEventListener("change",e=>handleFiles(e.target,amb.id));
+    d.querySelectorAll(".file-lbl input").forEach(inp=>inp.addEventListener("change",e=>handleFiles(e.target,amb.id)));
     const fb=d.querySelector(".fotos");
     amb.fotos.forEach(f=>{fotoN++;fb.appendChild(renderFoto(amb,f,fotoN));});
     box.appendChild(d);
