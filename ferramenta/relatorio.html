@@ -67,7 +67,9 @@
   .doc-on #doc{display:block;background:var(--ink-100);padding:24px 0}
   .doc-bar{position:sticky;top:0;z-index:20;background:var(--brand-800);color:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 20px;flex-wrap:wrap;gap:10px}
   .pg{width:210mm;min-height:297mm;background:#fff;margin:0 auto 22px;padding:18mm 20mm;box-shadow:0 8px 30px rgba(0,0,0,.12);color:#111;font-size:11.5pt;font-family:'Times New Roman',Georgia,serif}
-  .pg .eng{display:flex;flex-direction:column;gap:1px;font-size:10pt;line-height:1.35;margin-bottom:30px}
+  .pg .eng{display:flex;flex-direction:row;align-items:center;gap:14px;font-size:10pt;line-height:1.35;margin-bottom:30px}
+  .pg .eng__logo svg{width:54px;height:54px;display:block}
+  .pg .eng__txt{display:flex;flex-direction:column;gap:1px}
   .pg .eng b{font-size:11pt}
   .pg h1{text-align:center;font-size:19pt;letter-spacing:.06em;margin:60px 0 70px;font-family:Arial,sans-serif;font-weight:700}
   .pg .dados p{font-weight:700;font-size:11.5pt;margin:2px 0}
@@ -141,8 +143,8 @@
         <label>Unidade<input id="d_unidade"></label>
         <label>Endereço (Rua, nº)<input id="d_endereco"></label>
         <label>Área privativa<input id="d_area" placeholder="Ex.: 69,11 m²"></label>
-        <label>Data da vistoria<input id="d_data" placeholder="Ex.: 10/05/2026"></label>
-        <label>Horário<input id="d_horario" placeholder="Ex.: 14h00"></label>
+        <label>Data da vistoria<input id="d_data" type="date"></label>
+        <label>Horário<input id="d_horario" type="time"></label>
         <label>ART<input id="d_art"></label>
       </div>
     </div>
@@ -167,7 +169,7 @@
       <textarea id="consTxt" style="min-height:200px"></textarea>
       <div class="grid" style="margin-top:14px">
         <label>Local<input id="s_local" placeholder="São Paulo"></label>
-        <label>Data do relatório<input id="s_data" placeholder="Ex.: 12 de maio de 2026"></label>
+        <label>Data do relatório<input id="s_data" type="date"></label>
         <label>Assinatura — nome<input id="s_nome"></label>
         <label>Assinatura — CREA<input id="s_crea"></label>
       </div>
@@ -518,6 +520,11 @@ function zerarTudo(){
 }
 
 /* ---------- Preview / impressão ---------- */
+const MESES=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+function fmtData(v){const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(v||"");return m?(m[3]+"/"+m[2]+"/"+m[1]):(v||"");}
+function fmtHora(v){const m=/^(\d{1,2}):(\d{2})/.exec(v||"");return m?(m[1].padStart(2,"0")+"h"+m[2]):(v||"");}
+function fmtExtenso(v){const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(v||"");return m?(parseInt(m[3],10)+" de "+MESES[parseInt(m[2],10)-1]+" de "+m[1]):(v||"");}
+const LOGO_SVG='<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="lgr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1d4ed8"/><stop offset="100%" stop-color="#0b2545"/></linearGradient></defs><rect width="40" height="40" rx="8" fill="url(#lgr)"/><path d="M8 30 V14 L14 20 L20 14 L26 20 L32 14 V30 Z" fill="#fff"/><rect x="11" y="22" width="3" height="6" fill="#0b2545"/><rect x="18.5" y="22" width="3" height="6" fill="#0b2545"/><rect x="26" y="22" width="3" height="6" fill="#0b2545"/></svg>';
 function nl2p(t){return String(t||"").split(/\n{2,}/).map(p=>'<p class="par">'+esc(p).replace(/\n/g,"<br>")+'</p>').join("");}
 async function abrirPreview(){
   const H=state.header,D=state.dados,S=state.sig;
@@ -525,13 +532,15 @@ async function abrirPreview(){
   const row=(l,v)=>v?('<p>'+l+': '+esc(v)+'</p>'):'';
 
   bodies.push(
-    '<div class="eng"><b>'+esc(H.nome)+'</b><span>'+esc(H.titulo)+'</span><span>'+esc(H.crea)+'</span><span>'+esc(H.email)+'</span><span>'+esc(H.tel)+'</span></div>'+
+    '<div class="eng"><div class="eng__logo">'+LOGO_SVG+'</div><div class="eng__txt">'+
+      '<b>'+esc(H.nome)+'</b><span>'+esc(H.titulo)+'</span><span>'+esc(H.crea)+'</span><span>'+esc(H.email)+'</span><span>'+esc(H.tel)+'</span>'+
+    '</div></div>'+
     '<h1>RELATÓRIO DE VISTORIA</h1>'+
     '<div class="dados">'+
       row("Construtora",D.construtora)+row("Empreendimento",D.empreend)+row("Responsável pela vistoria",D.responsavel)+
       row("Proprietário",D.proprietario)+row("Representante da construtora",D.representante)+row("Unidade",D.unidade)+
-      row("Endereço",D.endereco)+row("Área privativa",D.area)+row("Data da vistoria",D.data)+
-      row("Horário",D.horario)+row("ART",D.art)+
+      row("Endereço",D.endereco)+row("Área privativa",D.area)+row("Data da vistoria",fmtData(D.data))+
+      row("Horário",fmtHora(D.horario))+row("ART",D.art)+
     '</div>'
   );
 
@@ -554,7 +563,7 @@ async function abrirPreview(){
   bodies.push(
     '<p class="amb-title" style="text-decoration:none;text-align:left">CONSIDERAÇÕES FINAIS</p>'+
     nl2p(state.cons)+
-    '<div class="sig"><p>'+esc(S.local||"São Paulo")+(S.data?(", "+esc(S.data)):", ____ de __________ de ______")+'</p>'+
+    '<div class="sig"><p>'+esc(S.local||"São Paulo")+(S.data?(", "+esc(fmtExtenso(S.data))):", ____ de __________ de ______")+'</p>'+
     '<b>'+esc(S.nome)+'</b><span>'+esc(S.crea)+'</span></div>'
   );
 
