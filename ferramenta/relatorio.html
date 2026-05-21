@@ -66,7 +66,10 @@
   .file-lbl--cam{background:#1d4ed8;color:#fff;border-color:#1d4ed8}
   .file-lbl--cam:hover{background:#1e40af}
   .file-lbl input{display:none}
-  .save-state{font-size:11px;color:var(--brand-100)}
+  .save-state{font-size:12px;font-weight:600;color:var(--brand-100);padding:4px 8px;border-radius:6px;background:rgba(255,255,255,.08)}
+  .save-state--ok{color:#bbf7d0;background:rgba(34,197,94,.18)}
+  .save-state--wait{color:#fde68a;background:rgba(251,191,36,.16)}
+  .save-state--err{color:#fff;background:#dc2626;font-weight:700}
   /* ===== Documento (preview/print) ===== */
   #doc{display:none}
   .doc-on #editor{display:none}
@@ -138,7 +141,13 @@
       <strong>Como usar:</strong> preencha os dados, adicione ambientes e fotos, descreva cada foto e use as ferramentas
       <b>Seta</b>/<b>Círculo</b> (vermelho) para marcar as não conformidades sobre a imagem. Ao terminar, clique em
       <b>“Gerar relatório”</b> e depois em <b>“Salvar PDF”</b> (impressão → destino “Salvar como PDF”).
-      Use <b>“Salvar rascunho”</b> para guardar o trabalho num arquivo e continuar depois (inclui as fotos).
+    </div>
+    <div class="hint" style="background:#ecfdf5;border-color:#86efac;color:#065f46">
+      🔒 <strong>Suas fotos estão seguras:</strong> cada foto é salva no aparelho <b>na hora</b> em que entra
+      (memória interna do navegador). Se o celular travar ou fechar, é só <b>reabrir esta página</b> —
+      o rascunho e todas as fotos voltam automaticamente, sem precisar refazer a vistoria.
+      Acompanhe o aviso verde <b>“✓ salvo no aparelho”</b> no topo. Ao terminar a vistoria, toque também
+      em <b>“💾 Salvar rascunho”</b> para guardar uma cópia em arquivo (backup extra, fora do navegador).
     </div>
 
     <div class="card">
@@ -376,11 +385,14 @@ function handleFiles(input,ambId){
   const amb=state.ambientes.find(a=>a.id===ambId);if(!amb)return;
   const files=[...input.files];input.value="";
   let pending=files.length;
+  setStateMsg("processando foto(s)…","wait");
   files.forEach(file=>{
     downscale(file).then(o=>{
       amb.fotos.push({id:uid(),desc:"",base:o.dataUrl,w:o.w,h:o.h,shapes:[]});
-      if(--pending===0){renderAmbs();saveSoon();}
-    }).catch(()=>{ if(--pending===0){renderAmbs();saveSoon();} });
+      // salva IMEDIATAMENTE cada foto que entra (garantia anti-travamento)
+      persistAgora();
+      if(--pending===0){renderAmbs();persistAgora();}
+    }).catch(()=>{ if(--pending===0){renderAmbs();persistAgora();} });
   });
 }
 function downscale(file){
@@ -518,26 +530,86 @@ function bakedDataUrl(f){
   });
 }
 
-/* ---------- Persistência ---------- */
-let saveTimer=null;
-function saveSoon(){clearTimeout(saveTimer);setStateMsg("salvando…");saveTimer=setTimeout(persist,600);}
-function persist(){
-  try{ localStorage.setItem(LS_KEY,JSON.stringify(state));setStateMsg("salvo automaticamente"); }
-  catch(e){ try{ const lite=JSON.parse(JSON.stringify(state));
-      lite.ambientes.forEach(a=>a.fotos.forEach(f=>{f.base="";f.shapes=[];}));
-      localStorage.setItem(LS_KEY,JSON.stringify(lite));
-      setStateMsg("⚠ texto salvo (fotos grandes — use Salvar rascunho)"); }catch(_){ setStateMsg("⚠ não foi possível salvar"); } }
+/* ---------- Persistência (IndexedDB = à prova de travamento) ----------
+   IndexedDB guarda centenas de MB e sobrevive a travamento/fechamento do
+   navegador. As fotos ficam salvas localmente no aparelho a cada mudança
+   e IMEDIATAMENTE quando uma foto nova entra. Se o celular travar, basta
+   reabrir a página que tudo é recuperado. localStorage fica como backup
+   só do texto (não falha por tamanho). */
+let saveTimer=null, idbReady=null;
+const IDB_DB="mframadan_relatorio", IDB_STORE="rascunho", IDB_KEY="atual";
+
+function idbOpen(){
+  if(idbReady) return idbReady;
+  idbReady=new Promise((res,rej)=>{
+    if(!window.indexedDB){rej(new Error("sem indexedDB"));return;}
+    const rq=indexedDB.open(IDB_DB,1);
+    rq.onupgradeneeded=()=>{ if(!rq.result.objectStoreNames.contains(IDB_STORE))rq.result.createObjectStore(IDB_STORE); };
+    rq.onsuccess=()=>res(rq.result);
+    rq.onerror=()=>rej(rq.error);
+  });
+  return idbReady;
 }
-function setStateMsg(t){const e=document.getElementById("saveState");if(e)e.textContent=t;}
-function loadLS(){
-  try{const r=localStorage.getItem(LS_KEY);if(r){const o=JSON.parse(r);
-    state=Object.assign(blankState(),o);
-    state.header=Object.assign(blankState().header,o.header||{});
-    state.dados=Object.assign(blankState().dados,o.dados||{});
-    state.sig=Object.assign(blankState().sig,o.sig||{});
-    state.ambientes=(o.ambientes||[]).map(a=>({id:a.id||uid(),nome:a.nome||"",
-      fotos:(a.fotos||[]).map(f=>({id:f.id||uid(),desc:f.desc||"",base:f.base||"",w:f.w||1000,h:f.h||750,shapes:f.shapes||[]}))}));
-  }}catch(e){}
+function idbPut(obj){
+  return idbOpen().then(db=>new Promise((res,rej)=>{
+    const tx=db.transaction(IDB_STORE,"readwrite");
+    tx.objectStore(IDB_STORE).put(obj,IDB_KEY);
+    tx.oncomplete=()=>res(true);
+    tx.onerror=()=>rej(tx.error);
+    tx.onabort=()=>rej(tx.error);
+  }));
+}
+function idbGet(){
+  return idbOpen().then(db=>new Promise((res,rej)=>{
+    const tx=db.transaction(IDB_STORE,"readonly");
+    const rq=tx.objectStore(IDB_STORE).get(IDB_KEY);
+    rq.onsuccess=()=>res(rq.result||null);
+    rq.onerror=()=>rej(rq.error);
+  }));
+}
+
+function contaFotos(){let n=0;state.ambientes.forEach(a=>n+=a.fotos.length);return n;}
+
+function saveSoon(){clearTimeout(saveTimer);setStateMsg("salvando…","wait");saveTimer=setTimeout(persist,500);}
+// salva agora, sem esperar o debounce — usado ao adicionar foto
+function persistAgora(){clearTimeout(saveTimer);return persist();}
+
+function persist(){
+  return idbPut(state).then(()=>{
+    setStateMsg("✓ salvo no aparelho · "+contaFotos()+" foto(s)","ok");
+    try{ const lite=JSON.parse(JSON.stringify(state));
+      lite.ambientes.forEach(a=>a.fotos.forEach(f=>{f.base="";}));
+      localStorage.setItem(LS_KEY,JSON.stringify(lite));
+    }catch(_){}
+    return true;
+  }).catch(()=>{
+    try{ localStorage.setItem(LS_KEY,JSON.stringify(state));
+      setStateMsg("✓ salvo (modo simples)","ok"); return true; }
+    catch(_){ setStateMsg("⚠ MEMÓRIA CHEIA — toque em \"Salvar rascunho\" AGORA","err"); return false; }
+  });
+}
+function setStateMsg(t,cls){
+  const e=document.getElementById("saveState");
+  if(e){ e.textContent=t; e.className="save-state"+(cls?(" save-state--"+cls):""); }
+}
+function hydrate(o){
+  state=Object.assign(blankState(),o);
+  state.header=Object.assign(blankState().header,o.header||{});
+  state.dados=Object.assign(blankState().dados,o.dados||{});
+  state.sig=Object.assign(blankState().sig,o.sig||{});
+  state.layout=[1,2,4].includes(o.layout)?o.layout:1;
+  state.ambientes=(o.ambientes||[]).map(a=>({id:a.id||uid(),nome:a.nome||"",
+    fotos:(a.fotos||[]).map(f=>({id:f.id||uid(),desc:f.desc||"",base:f.base||"",w:f.w||1000,h:f.h||750,shapes:f.shapes||[]}))}));
+}
+function loadState(){
+  // IndexedDB tem as fotos; localStorage é só fallback do texto
+  return idbGet().then(o=>{
+    if(o&&o.ambientes){hydrate(o);return;}
+    const r=localStorage.getItem(LS_KEY);
+    if(r)hydrate(JSON.parse(r));
+  }).catch(()=>{
+    try{const r=localStorage.getItem(LS_KEY);if(r)hydrate(JSON.parse(r));}catch(_){}
+  });
 }
 function exportarRascunho(){
   const blob=new Blob([JSON.stringify(state)],{type:"application/json"});
@@ -573,6 +645,8 @@ function fmtExtenso(v){const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(v||"");return m?(
 const LOGO_SVG='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 220" aria-hidden="true"><defs><linearGradient id="mfBldg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient></defs><text x="140" y="158" text-anchor="middle" font-family="Arial Black,Helvetica Neue,Impact,Arial,sans-serif" font-weight="900" font-size="200" letter-spacing="-12" fill="#0b2545">M</text><g fill="url(#mfBldg)"><rect x="108" y="80" width="18" height="80" rx="1"/><rect x="128" y="55" width="24" height="105" rx="1"/><rect x="154" y="85" width="18" height="75" rx="1"/></g><g fill="#dbeafe" opacity=".55"><rect x="112" y="92" width="10" height="3"/><rect x="112" y="105" width="10" height="3"/><rect x="112" y="118" width="10" height="3"/><rect x="112" y="131" width="10" height="3"/><rect x="112" y="144" width="10" height="3"/><rect x="132" y="68" width="16" height="3"/><rect x="132" y="81" width="16" height="3"/><rect x="132" y="94" width="16" height="3"/><rect x="132" y="107" width="16" height="3"/><rect x="132" y="120" width="16" height="3"/><rect x="132" y="133" width="16" height="3"/><rect x="132" y="146" width="16" height="3"/><rect x="158" y="95" width="10" height="3"/><rect x="158" y="108" width="10" height="3"/><rect x="158" y="121" width="10" height="3"/><rect x="158" y="134" width="10" height="3"/><rect x="158" y="147" width="10" height="3"/></g><text x="140" y="205" text-anchor="middle" font-family="Arial Black,Helvetica Neue,Impact,Arial,sans-serif" font-weight="900" font-size="34" letter-spacing="4" fill="#0b2545">MFRAMADAN</text></svg>';
 function nl2p(t){return String(t||"").split(/\n{2,}/).map(p=>'<p class="par">'+esc(p).replace(/\n/g,"<br>")+'</p>').join("");}
 async function abrirPreview(){
+  // garante que tudo esta salvo ANTES de gerar o PDF (momento mais pesado)
+  try{ await persistAgora(); }catch(_){}
   const H=state.header,D=state.dados,S=state.sig;
   const bodies=[];
   const row=(l,v)=>v?('<p>'+l+': '+esc(v)+'</p>'):'';
@@ -654,8 +728,15 @@ function renderPresets(){
 }
 
 /* ---------- Init ---------- */
-loadLS();fillFields();bindFields();renderAmbs();renderPresets();
-window.addEventListener("beforeunload",persist);
+bindFields();
+setStateMsg("carregando rascunho salvo…","wait");
+loadState().then(()=>{
+  fillFields();renderAmbs();renderPresets();
+  const n=contaFotos();
+  if(n>0) setStateMsg("✓ rascunho recuperado · "+n+" foto(s)","ok");
+  else setStateMsg("pronto — salvamento automático ativo","ok");
+}).catch(()=>{ fillFields();renderAmbs();renderPresets(); });
+window.addEventListener("beforeunload",()=>{ try{persist();}catch(_){} });
 </script>
 </body>
 </html>
