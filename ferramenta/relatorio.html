@@ -72,6 +72,7 @@
   .doc-on #editor{display:none}
   .doc-on #doc{display:block;background:var(--ink-100);padding:24px 0}
   .doc-bar{position:sticky;top:0;z-index:20;background:var(--brand-800);color:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 20px;flex-wrap:wrap;gap:10px}
+  .doc-tip{max-width:210mm;margin:0 auto 14px;background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:8px;padding:10px 16px;font-size:12.5px;line-height:1.5}
   .pg{width:210mm;min-height:297mm;background:#fff;margin:0 auto 22px;padding:18mm 20mm;box-shadow:0 8px 30px rgba(0,0,0,.12);color:#111;font-size:11.5pt;font-family:'Times New Roman',Georgia,serif}
   .pg .eng{display:flex;flex-direction:row;align-items:center;gap:14px;font-size:10pt;line-height:1.35;margin-bottom:30px}
   .pg .eng__logo svg{width:90px;height:auto;display:block}
@@ -85,14 +86,14 @@
   .pg figcaption{margin-bottom:8px;text-align:justify}
   .pg figcaption b{font-weight:700}
   /* Grids de fotos por página */
-  .photos-grid--1 figure img{display:block;max-width:78%;max-height:165mm;margin:0 auto;border:1px solid #ddd}
+  .photos-grid--1 figure img{display:block;max-width:76%;max-height:158mm;margin:0 auto;border:1px solid #ddd}
   .photos-grid--2{display:flex;flex-direction:column;gap:6mm}
   .photos-grid--2 figure{margin:0}
-  .photos-grid--2 figure img{display:block;max-width:78%;max-height:110mm;margin:0 auto;border:1px solid #ddd}
+  .photos-grid--2 figure img{display:block;max-width:72%;max-height:95mm;margin:0 auto;border:1px solid #ddd}
   .photos-grid--2 figcaption{font-size:10.5pt;margin-bottom:5px}
-  .photos-grid--4{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:5mm 7mm}
+  .photos-grid--4{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:5mm 7mm}
   .photos-grid--4 figure{margin:0}
-  .photos-grid--4 figure img{display:block;width:100%;max-height:78mm;object-fit:contain;border:1px solid #ddd}
+  .photos-grid--4 figure img{display:block;width:100%;max-height:72mm;object-fit:contain;border:1px solid #ddd}
   .photos-grid--4 figcaption{font-size:9.5pt;margin-bottom:4px;line-height:1.3}
   .pg figure img{display:block;max-width:78%;max-height:165mm;margin:0 auto;border:1px solid #ddd}
   .pg{display:flex;flex-direction:column}
@@ -103,11 +104,16 @@
   .pg__foot b{color:#555;font-weight:600}
   @media print{
     body{background:#fff}
-    .topbar,.doc-bar,#editor,.hint{display:none!important}
+    .topbar,.doc-bar,.doc-tip,#editor,.hint{display:none!important}
     #doc{display:block!important;background:#fff;padding:0}
-    .pg{width:auto;min-height:262mm;margin:0;padding:14mm 16mm;box-shadow:none;page-break-after:always}
-    .pg:last-child{page-break-after:auto}
-    @page{size:A4;margin:0}
+    /* cada .pg = exatamente 1 folha: altura pelo conteudo (sem forcar altura),
+       evitando estouro que gerava paginas em branco */
+    .pg{width:auto;min-height:0;height:auto;margin:0;padding:12mm 14mm;
+        box-shadow:none;display:block;page-break-after:always;break-after:page}
+    .pg:last-child{page-break-after:auto;break-after:auto}
+    .pg__body{flex:none}
+    .pg__foot{margin-top:18px}
+    @page{size:A4;margin:10mm}
   }
   @media(max-width:760px){.grid,.grid-3{grid-template-columns:1fr}.pg{width:100%;padding:14mm}}
 </style>
@@ -208,7 +214,13 @@
   <div class="doc-bar">
     <button class="btn-ghost" onclick="fecharPreview()">← Voltar a editar</button>
     <strong style="color:#fff">Pré-visualização do relatório</strong>
-    <button class="btn-ok" onclick="window.print()">🖨️ Salvar PDF / Imprimir</button>
+    <button class="btn-ok" onclick="imprimirPDF()">🖨️ Salvar PDF / Imprimir</button>
+  </div>
+  <div class="doc-tip">
+    ⚠️ <b>No diálogo de impressão</b>, para o PDF sair certo:
+    <b>Destino</b> = Salvar como PDF ·
+    <b>Margens</b> = Padrão ·
+    <b>DESMARQUE</b> a opção <b>“Cabeçalhos e rodapés”</b> (senão sai o endereço do site e a numeração dupla).
   </div>
   <div id="docPages"></div>
 </div>
@@ -620,6 +632,14 @@ async function abrirPreview(){
   document.body.classList.add("doc-on");window.scrollTo(0,0);
 }
 function fecharPreview(){document.body.classList.remove("doc-on");}
+function imprimirPDF(){
+  alert("Antes de salvar o PDF, confira no diálogo de impressão:\n\n"+
+        "• Destino: Salvar como PDF\n"+
+        "• Margens: Padrão\n"+
+        "• DESMARQUE \"Cabeçalhos e rodapés\"\n\n"+
+        "Isso evita o endereço do site e a numeração dupla nas páginas.");
+  window.print();
+}
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 
 function renderPresets(){
