@@ -105,16 +105,21 @@
   .pg__foot{margin-top:auto;padding-top:8px;border-top:1px solid #ddd;display:flex;justify-content:space-between;align-items:flex-end;font-family:Arial,sans-serif;font-size:8.5pt;color:#888}
   .pg__foot b{color:#555;font-weight:600}
   @media print{
-    body{background:#fff}
+    html,body{background:#fff!important}
     .topbar,.doc-bar,.doc-tip,#editor,.hint{display:none!important}
-    #doc{display:block!important;background:#fff;padding:0}
+    /* !important vence .doc-on #doc (cinza) — senao o fundo cinza vaza
+       por baixo das paginas no PDF */
+    #doc,.doc-on #doc{display:block!important;background:#fff!important;padding:0!important}
     /* cada .pg = exatamente 1 folha: altura pelo conteudo (sem forcar altura),
        evitando estouro que gerava paginas em branco */
     .pg{width:auto;min-height:0;height:auto;margin:0;padding:12mm 14mm;
         box-shadow:none;display:block;page-break-after:always;break-after:page}
     .pg:last-child{page-break-after:auto;break-after:auto}
     .pg__body{flex:none}
-    .pg__foot{margin-top:18px}
+    .pg__foot{margin-top:16px}
+    .pg .sig{margin-top:30px}
+    .pg .sig b{margin-top:26px}
+    .pg .par{margin-bottom:9px}
     @page{size:A4;margin:10mm}
   }
   @media(max-width:760px){.grid,.grid-3{grid-template-columns:1fr}.pg{width:100%;padding:14mm}}
@@ -666,23 +671,46 @@ async function abrirPreview(){
   bodies.push(nl2p(state.intro));
 
   const layout=[1,2,4].includes(state.layout)?state.layout:1;
-  let n=0;
-  for(let ai=0;ai<state.ambientes.length;ai++){
-    const amb=state.ambientes[ai];
-    const titulo='<p class="amb-title">'+(ORD[ai]||(ai+1)+"º")+' Ambiente'+(amb.nome?(' &ndash; '+esc(amb.nome.toUpperCase())):'')+'</p>';
-    if(!amb.fotos.length){ bodies.push(titulo+'<p class="par"><i>Sem fotos neste ambiente.</i></p>'); continue; }
-    // agrupa fotos em blocos de "layout" fotos por pagina
-    for(let start=0;start<amb.fotos.length;start+=layout){
-      const chunk=amb.fotos.slice(start,start+layout);
-      let inner='';
-      for(const f of chunk){
-        n++;
+
+  if(layout===1){
+    // 1 foto/pagina: titulo de secao por ambiente (igual ao modelo)
+    let n=0;
+    for(let ai=0;ai<state.ambientes.length;ai++){
+      const amb=state.ambientes[ai];
+      const titulo='<p class="amb-title">'+(ORD[ai]||(ai+1)+"º")+' Ambiente'+(amb.nome?(' &ndash; '+esc(amb.nome.toUpperCase())):'')+'</p>';
+      if(!amb.fotos.length){ bodies.push(titulo+'<p class="par"><i>Sem fotos neste ambiente.</i></p>'); continue; }
+      for(let fi=0;fi<amb.fotos.length;fi++){
+        const f=amb.fotos[fi];n++;
         const src=(f.shapes&&f.shapes.length)?await bakedDataUrl(f):f.base;
-        inner+='<figure><figcaption><b>Foto '+n+':</b> '+esc(f.desc||"")+'</figcaption>'+
-               '<img src="'+src+'"></figure>';
+        bodies.push((fi===0?titulo:'')+
+          '<div class="photos-grid photos-grid--1"><figure>'+
+          '<figcaption><b>Foto '+n+':</b> '+esc(f.desc||"")+'</figcaption>'+
+          '<img src="'+src+'"></figure></div>');
       }
-      bodies.push((start===0?titulo:'')+
-        '<div class="photos-grid photos-grid--'+layout+'">'+inner+'</div>');
+    }
+  } else {
+    // 2 ou 4 fotos/pagina: fluxo continuo entre ambientes;
+    // o ambiente aparece na legenda de cada foto
+    const flat=[];
+    let n=0;
+    for(let ai=0;ai<state.ambientes.length;ai++){
+      const amb=state.ambientes[ai];
+      const nomeAmb=amb.nome?amb.nome.toUpperCase():((ORD[ai]||(ai+1)+"º").toUpperCase()+" AMBIENTE");
+      amb.fotos.forEach(f=>{ n++; flat.push({f:f,num:n,amb:nomeAmb}); });
+    }
+    if(!flat.length){
+      bodies.push('<p class="par"><i>Nenhuma foto adicionada.</i></p>');
+    }
+    for(let start=0;start<flat.length;start+=layout){
+      const chunk=flat.slice(start,start+layout);
+      let inner='';
+      for(const it of chunk){
+        const f=it.f;
+        const src=(f.shapes&&f.shapes.length)?await bakedDataUrl(f):f.base;
+        inner+='<figure><figcaption><b>Foto '+it.num+' &ndash; '+esc(it.amb)+':</b> '+
+               esc(f.desc||"")+'</figcaption><img src="'+src+'"></figure>';
+      }
+      bodies.push('<div class="photos-grid photos-grid--'+layout+'">'+inner+'</div>');
     }
   }
 
