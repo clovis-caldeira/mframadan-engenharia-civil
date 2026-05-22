@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0b2545" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Minhas Vistorias — MFRAMADAN (uso interno)</title>
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+<style>
+  :root{
+    --brand-900:#061a36;--brand-800:#0b2545;--brand-700:#133b7c;--brand-600:#1d4ed8;
+    --brand-100:#dbeafe;--brand-50:#eff6ff;--ink-900:#0a0f1c;--ink-800:#1a202c;
+    --ink-700:#2d3748;--ink-600:#4a5568;--ink-500:#718096;--ink-300:#cbd5e0;
+    --ink-200:#e2e8f0;--ink-100:#edf2f7;--ink-50:#f7fafc;--ok:#16a34a;--danger:#dc2626;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;background:var(--ink-100);color:var(--ink-800);line-height:1.5;-webkit-font-smoothing:antialiased}
+  button{font:inherit;cursor:pointer;border:0;border-radius:8px;font-weight:600;transition:.15s}
+  a{color:inherit}
+
+  /* ===== Topbar ===== */
+  .topbar{background:linear-gradient(135deg,var(--brand-800),var(--brand-900));color:#fff;padding:14px 18px}
+  .topbar__in{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand svg{width:42px;height:42px;flex:none}
+  .brand h1{font-size:16px;letter-spacing:.02em;line-height:1.1}
+  .brand small{display:block;font-size:11px;font-weight:400;color:var(--brand-100)}
+  .topbar__sp{flex:1}
+  .top-btn{background:rgba(255,255,255,.14);color:#fff;padding:9px 14px;font-size:13px;display:inline-flex;align-items:center;gap:6px}
+  .top-btn:hover{background:rgba(255,255,255,.26)}
+
+  /* ===== Layout ===== */
+  .wrap{max-width:960px;margin:0 auto;padding:18px 18px 120px}
+  .hint{background:#ecfdf5;border:1px solid #86efac;color:#065f46;border-radius:10px;padding:11px 15px;font-size:13px;margin-bottom:16px}
+  .hint b{font-weight:700}
+
+  /* ===== Toolbar ===== */
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .search{flex:1;min-width:180px;display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--ink-200);border-radius:10px;padding:9px 13px}
+  .search input{border:0;outline:0;font:inherit;font-size:14px;width:100%;background:transparent;color:var(--ink-900)}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap}
+  .tab{background:#fff;border:1.5px solid var(--ink-200);color:var(--ink-600);padding:8px 13px;font-size:13px;border-radius:999px}
+  .tab.is-active{background:var(--brand-700);border-color:var(--brand-700);color:#fff}
+  .tab .cnt{opacity:.7;font-weight:700}
+
+  /* ===== Cards ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .card{background:#fff;border:1px solid var(--ink-200);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;border-left:5px solid var(--ink-300)}
+  .card.st-andamento{border-left-color:#f59e0b}
+  .card.st-revisao{border-left-color:#2563eb}
+  .card.st-finalizada{border-left-color:#16a34a}
+  .card__top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+  .card__title{font-size:15px;font-weight:700;color:var(--ink-900);line-height:1.25}
+  .badge{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;letter-spacing:.02em}
+  .badge.st-andamento{background:#fef3c7;color:#92400e}
+  .badge.st-revisao{background:#dbeafe;color:#1e40af}
+  .badge.st-finalizada{background:#dcfce7;color:#166534}
+  .card__meta{font-size:12.5px;color:var(--ink-600);display:flex;flex-direction:column;gap:2px}
+  .card__meta b{color:var(--ink-800)}
+  .card__stats{display:flex;gap:14px;font-size:12px;color:var(--ink-500);border-top:1px solid var(--ink-100);padding-top:9px}
+  .card__stats strong{color:var(--brand-700);font-size:14px}
+  .card__acts{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+  .btn-abrir{background:var(--brand-600);color:#fff;padding:9px 16px;font-size:13px;flex:1;min-width:110px}
+  .btn-abrir:hover{background:var(--brand-700)}
+  .mini{background:var(--ink-50);border:1px solid var(--ink-200);color:var(--ink-600);padding:8px 10px;font-size:12px}
+  .mini:hover{background:var(--ink-100)}
+  .mini.danger{color:var(--danger)}
+  .mini.danger:hover{background:#fee2e2}
+  select.statusSel{font:inherit;font-size:12px;font-weight:600;border:1px solid var(--ink-200);border-radius:7px;padding:7px 8px;background:#fff;color:var(--ink-700);cursor:pointer}
+
+  .empty{text-align:center;padding:50px 20px;color:var(--ink-500)}
+  .empty svg{width:54px;height:54px;color:var(--ink-300);margin-bottom:12px}
+  .empty h3{color:var(--ink-700);font-size:16px;margin-bottom:4px}
+
+  /* ===== FAB ===== */
+  .fab{position:fixed;right:18px;bottom:18px;background:var(--brand-600);color:#fff;padding:15px 22px;border-radius:999px;font-size:15px;box-shadow:0 12px 28px rgba(29,78,216,.4);display:inline-flex;align-items:center;gap:8px;z-index:30}
+  .fab:hover{background:var(--brand-700)}
+  .fab svg{width:20px;height:20px}
+
+  .foot-info{margin-top:22px;font-size:12px;color:var(--ink-500);text-align:center;line-height:1.7}
+  .foot-info a{color:var(--brand-600);font-weight:600;text-decoration:none}
+
+  @media(max-width:560px){
+    .grid{grid-template-columns:1fr}
+    .brand h1{font-size:15px}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar__in">
+    <div class="brand">
+      <svg viewBox="0 0 280 220" aria-hidden="true">
+        <text x="140" y="158" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="200" letter-spacing="-12" fill="#fff">M</text>
+        <g fill="#60a5fa"><rect x="108" y="80" width="18" height="80"/><rect x="128" y="55" width="24" height="105"/><rect x="154" y="85" width="18" height="75"/></g>
+        <text x="140" y="205" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="34" letter-spacing="4" fill="#fff">MFRAMADAN</text>
+      </svg>
+      <div>
+        <h1>Minhas Vistorias</h1>
+        <small>Gerenciador — MFRAMADAN Engenharia Civil</small>
+      </div>
+    </div>
+    <div class="topbar__sp"></div>
+    <button class="top-btn" onclick="importar()">📥 Importar</button>
+    <button class="top-btn" onclick="exportarTudo()">🗄️ Backup completo</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hint">
+    🔒 <b>Cada vistoria fica salva no aparelho.</b> Você pode ter várias em andamento ao mesmo tempo,
+    sair e voltar quando quiser. Para <b>voltar a esta tela</b> depois de editar um relatório,
+    use o botão <b>Voltar</b> do navegador. Toque em <b>“💾 Backup completo”</b> de vez em quando para guardar uma cópia.
+  </div>
+
+  <div class="toolbar">
+    <label class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#718096" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="busca" type="search" placeholder="Buscar por empreendimento, unidade, proprietário…" />
+    </label>
+  </div>
+  <div class="tabs" id="tabs"></div>
+
+  <div id="lista"></div>
+
+  <div class="foot-info">
+    Editor de relatório: <a href="relatorio.html">relatorio.html</a> ·
+    <span id="armazenamento">calculando armazenamento…</span>
+  </div>
+</div>
+
+<button class="fab" onclick="novaVistoria()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+  Nova Vistoria
+</button>
+
+<input type="file" id="fileImport" accept="application/json" style="display:none" />
+
+<script>
+"use strict";
+
+/* =========================================================
+   MODELO DE DADOS
+   ---------------------------------------------------------
+   DB "mframadan_vistorias" / store "vistorias" (keyPath id):
+     {
+       id, label, status: andamento|revisao|finalizada,
+       criadoEm, atualizadoEm,
+       snapshot: { _vid, header, dados, intro, ambientes[], cons, sig, layout }
+     }
+   O "snapshot" tem o MESMO formato do rascunho do relatorio.html
+   (compatibilidade total: exportar/importar .json funciona nos dois).
+
+   Handoff com o relatorio.html (NAO foi alterado):
+   - DB "mframadan_relatorio" / store "rascunho" / key "atual"
+   - Ao abrir uma vistoria, gravamos o snapshot dela em "atual" e
+     navegamos para relatorio.html. Ele edita "atual" normalmente.
+   - Ao voltar para esta tela, lemos "atual" e gravamos de volta na
+     vistoria certa (identificada pelo carimbo snapshot._vid).
+   ========================================================= */
+
+const VDB="mframadan_vistorias", VSTORE="vistorias";
+const RDB="mframadan_relatorio", RSTORE="rascunho", RKEY="atual";
+const ABERTA="mframadan_vistoria_aberta"; // localStorage: id da vistoria em edicao
+
+const STATUS={
+  andamento:{rotulo:"Em andamento"},
+  revisao:{rotulo:"Em revisão"},
+  finalizada:{rotulo:"Finalizada"}
+};
+
+let vdb=null, rdb=null;
+let filtroStatus="todas", termoBusca="";
+
+/* ---------- IndexedDB genérico ---------- */
+function abrirDB(nome,versao,upgrade){
+  return new Promise((res,rej)=>{
+    const rq=indexedDB.open(nome,versao);
+    if(upgrade) rq.onupgradeneeded=()=>upgrade(rq.result);
+    rq.onsuccess=()=>res(rq.result);
+    rq.onerror=()=>rej(rq.error);
+  });
+}
+function tx(db,store,modo){ return db.transaction(store,modo).objectStore(store); }
+function reqP(r){ return new Promise((res,rej)=>{ r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }); }
+
+// store vistorias (keyPath id)
+function vGetAll(){ return reqP(tx(vdb,VSTORE,"readonly").getAll()); }
+function vGet(id){ return reqP(tx(vdb,VSTORE,"readonly").get(id)); }
+function vPut(rec){
+  return new Promise((res,rej)=>{
+    const t=vdb.transaction(VSTORE,"readwrite");
+    t.objectStore(VSTORE).put(rec);
+    t.oncomplete=()=>res(true); t.onerror=()=>rej(t.error); t.onabort=()=>rej(t.error);
+  });
+}
+function vDel(id){
+  return new Promise((res,rej)=>{
+    const t=vdb.transaction(VSTORE,"readwrite");
+    t.objectStore(VSTORE).delete(id);
+    t.oncomplete=()=>res(true); t.onerror=()=>rej(t.error);
+  });
+}
+// store rascunho do relatorio (key avulsa "atual")
+function rGet(){ try{ return reqP(tx(rdb,RSTORE,"readonly").get(RKEY)); }catch(e){ return Promise.resolve(null); } }
+function rPut(obj){
+  return new Promise((res,rej)=>{
+    const t=rdb.transaction(RSTORE,"readwrite");
+    t.objectStore(RSTORE).put(obj,RKEY);
+    t.oncomplete=()=>res(true); t.onerror=()=>rej(t.error); t.onabort=()=>rej(t.error);
+  });
+}
+
+/* ---------- Utilidades ---------- */
+const uid=()=>"v_"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function contaFotos(snap){
+  if(!snap||!snap.ambientes) return 0;
+  return snap.ambientes.reduce((n,a)=>n+((a.fotos&&a.fotos.length)||0),0);
+}
+function tituloDe(v){
+  if(v.label && v.label.trim()) return v.label.trim();
+  const d=(v.snapshot&&v.snapshot.dados)||{};
+  const t=[d.empreend,d.unidade].filter(Boolean).join(" · ");
+  return t||"Vistoria sem nome";
+}
+function tempoRel(ts){
+  if(!ts) return "—";
+  const s=Math.floor((Date.now()-ts)/1000);
+  if(s<60) return "agora há pouco";
+  if(s<3600) return "há "+Math.floor(s/60)+" min";
+  if(s<86400) return "há "+Math.floor(s/3600)+" h";
+  const d=Math.floor(s/86400);
+  if(d===1) return "ontem";
+  if(d<30) return "há "+d+" dias";
+  return new Date(ts).toLocaleDateString("pt-BR");
+}
+
+/* ---------- Sincronização com o relatorio.html ---------- */
+// Lê o "atual" (editado pelo relatorio.html) e grava de volta na vistoria certa.
+async function syncBack(){
+  const aberta=localStorage.getItem(ABERTA);
+  if(!aberta) return;
+  let atual=null;
+  try{ atual=await rGet(); }catch(e){ return; }
+  if(!atual||!atual.ambientes) return;
+  const vid=atual._vid||aberta;
+  const v=await vGet(vid);
+  if(!v) return;
+  atual._vid=vid;
+  v.snapshot=atual;
+  v.atualizadoEm=Date.now();
+  await vPut(v);
+}
+
+/* ---------- Ações ---------- */
+async function novaVistoria(){
+  const nome=prompt("Identificação da vistoria\n(ex.: Verde Morumbi — Apto 43c):","");
+  if(nome===null) return;
+  const id=uid(), agora=Date.now();
+  const rec={
+    id, label:nome.trim(), status:"andamento", criadoEm:agora, atualizadoEm:agora,
+    snapshot:{ _vid:id, ambientes:[], dados:{} }   // demais campos o relatorio.html preenche
+  };
+  await vPut(rec);
+  await abrirVistoria(id);
+}
+
+async function abrirVistoria(id){
+  await syncBack();                       // salva o que estava aberto antes
+  const v=await vGet(id);
+  if(!v){ alert("Vistoria não encontrada."); return; }
+  v.snapshot=v.snapshot||{ambientes:[],dados:{}};
+  v.snapshot._vid=id;
+  await rPut(v.snapshot);                 // entrega para o relatorio.html
+  localStorage.setItem(ABERTA,id);
+  location.href="relatorio.html";
+}
+
+async function mudarStatus(id,status){
+  const v=await vGet(id); if(!v) return;
+  v.status=status;
+  await vPut(v);
+  render();
+}
+
+async function duplicarVistoria(id){
+  const v=await vGet(id); if(!v) return;
+  const novoId=uid(), agora=Date.now();
+  const snap=JSON.parse(JSON.stringify(v.snapshot||{ambientes:[],dados:{}}));
+  snap._vid=novoId;
+  await vPut({id:novoId,label:tituloDe(v)+" (cópia)",status:"andamento",
+    criadoEm:agora,atualizadoEm:agora,snapshot:snap});
+  render();
+}
+
+async function renomear(id){
+  const v=await vGet(id); if(!v) return;
+  const nome=prompt("Novo nome da vistoria:",tituloDe(v));
+  if(nome===null) return;
+  v.label=nome.trim();
+  await vPut(v);
+  render();
+}
+
+async function excluirVistoria(id){
+  const v=await vGet(id); if(!v) return;
+  if(!confirm('Excluir a vistoria "'+tituloDe(v)+'"?\n\nEssa ação não pode ser desfeita. '+
+              'Considere exportar antes (botão Exportar).')) return;
+  await vDel(id);
+  if(localStorage.getItem(ABERTA)===id) localStorage.removeItem(ABERTA);
+  render();
+}
+
+/* ---------- Exportar / Importar ---------- */
+function baixarJSON(obj,nomeArq){
+  const blob=new Blob([JSON.stringify(obj)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download=nomeArq;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),3000);
+}
+async function exportarVistoria(id){
+  const v=await vGet(id); if(!v) return;
+  // exporta o snapshot puro -> mesmo formato do rascunho do relatorio.html
+  const nome=tituloDe(v).replace(/[^\w\-]+/g,"_").slice(0,40)||"vistoria";
+  baixarJSON(v.snapshot||{ambientes:[]},"vistoria_"+nome+".json");
+}
+async function exportarTudo(){
+  const todas=await vGetAll();
+  if(!todas.length){ alert("Não há vistorias para exportar."); return; }
+  baixarJSON({tipo:"mframadan_backup_vistorias",versao:1,exportadoEm:Date.now(),vistorias:todas},
+    "backup_vistorias_"+new Date().toISOString().slice(0,10)+".json");
+}
+function importar(){ document.getElementById("fileImport").click(); }
+document.getElementById("fileImport").addEventListener("change",function(){
+  const file=this.files[0]; this.value="";
+  if(!file) return;
+  const fr=new FileReader();
+  fr.onload=async()=>{
+    let o; try{ o=JSON.parse(fr.result); }catch(e){ alert("Arquivo inválido."); return; }
+    const agora=Date.now();
+    try{
+      if(o&&o.tipo==="mframadan_backup_vistorias"&&Array.isArray(o.vistorias)){
+        for(const v of o.vistorias){
+          const id=v.id||uid();
+          const snap=v.snapshot||{ambientes:[],dados:{}}; snap._vid=id;
+          await vPut({id,label:v.label||"",status:v.status||"andamento",
+            criadoEm:v.criadoEm||agora,atualizadoEm:v.atualizadoEm||agora,snapshot:snap});
+        }
+        alert(o.vistorias.length+" vistoria(s) importada(s).");
+      } else if(o&&o.snapshot&&o.snapshot.ambientes){
+        const id=uid(); o.snapshot._vid=id;
+        await vPut({id,label:o.label||"",status:o.status||"andamento",
+          criadoEm:agora,atualizadoEm:agora,snapshot:o.snapshot});
+        alert("Vistoria importada.");
+      } else if(o&&o.ambientes){
+        // rascunho puro do relatorio.html
+        const id=uid(); o._vid=id;
+        const d=o.dados||{};
+        await vPut({id,label:[d.empreend,d.unidade].filter(Boolean).join(" · "),
+          status:"andamento",criadoEm:agora,atualizadoEm:agora,snapshot:o});
+        alert("Rascunho importado como nova vistoria.");
+      } else { alert("Formato não reconhecido."); return; }
+      render();
+    }catch(e){ alert("Erro ao importar: "+e); }
+  };
+  fr.readAsText(file);
+});
+
+/* ---------- Migração / compatibilidade ---------- */
+// Se for o primeiro uso e já existir um rascunho no relatorio.html, importa.
+async function migrarLegado(){
+  const todas=await vGetAll();
+  if(todas.length) return;
+  let atual=null;
+  try{ atual=await rGet(); }catch(e){ return; }
+  if(atual&&atual.ambientes&&(atual.ambientes.length||
+      (atual.dados&&(atual.dados.empreend||atual.dados.unidade)))){
+    const id=uid(); atual._vid=id;
+    const d=atual.dados||{};
+    await vPut({id,label:[d.empreend,d.unidade].filter(Boolean).join(" · "),
+      status:"andamento",criadoEm:Date.now(),atualizadoEm:Date.now(),snapshot:atual});
+  }
+}
+
+/* ---------- Render ---------- */
+async function render(){
+  const todas=(await vGetAll()).sort((a,b)=>(b.atualizadoEm||0)-(a.atualizadoEm||0));
+  // abas com contagem
+  const cont={todas:todas.length,andamento:0,revisao:0,finalizada:0};
+  todas.forEach(v=>{ if(cont[v.status]!=null) cont[v.status]++; });
+  const abas=[["todas","Todas"],["andamento","Em andamento"],["revisao","Em revisão"],["finalizada","Finalizadas"]];
+  document.getElementById("tabs").innerHTML=abas.map(([k,r])=>
+    '<button class="tab'+(filtroStatus===k?' is-active':'')+'" onclick="setFiltro(\''+k+'\')">'+
+    r+' <span class="cnt">'+cont[k]+'</span></button>').join("");
+
+  // filtro + busca
+  let lista=todas;
+  if(filtroStatus!=="todas") lista=lista.filter(v=>v.status===filtroStatus);
+  if(termoBusca){
+    const t=termoBusca.toLowerCase();
+    lista=lista.filter(v=>{
+      const d=(v.snapshot&&v.snapshot.dados)||{};
+      return (tituloDe(v)+" "+(d.construtora||"")+" "+(d.proprietario||"")+" "+
+              (d.empreend||"")+" "+(d.unidade||"")).toLowerCase().includes(t);
+    });
+  }
+
+  const box=document.getElementById("lista");
+  if(!todas.length){
+    box.innerHTML='<div class="empty">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'+
+      '<h3>Nenhuma vistoria ainda</h3>'+
+      '<p>Toque em “Nova Vistoria” para começar a primeira.</p></div>';
+    return;
+  }
+  if(!lista.length){
+    box.innerHTML='<div class="empty"><h3>Nada encontrado</h3><p>Ajuste a busca ou o filtro.</p></div>';
+    return;
+  }
+
+  box.innerHTML='<div class="grid">'+lista.map(v=>{
+    const d=(v.snapshot&&v.snapshot.dados)||{};
+    const nf=contaFotos(v.snapshot);
+    const na=(v.snapshot&&v.snapshot.ambientes&&v.snapshot.ambientes.length)||0;
+    const st=STATUS[v.status]?v.status:"andamento";
+    const opt=Object.keys(STATUS).map(k=>
+      '<option value="'+k+'"'+(k===st?' selected':'')+'>'+STATUS[k].rotulo+'</option>').join("");
+    return '<div class="card st-'+st+'">'+
+      '<div class="card__top">'+
+        '<div class="card__title">'+esc(tituloDe(v))+'</div>'+
+        '<span class="badge st-'+st+'">'+STATUS[st].rotulo+'</span>'+
+      '</div>'+
+      '<div class="card__meta">'+
+        (d.construtora?'<span>Construtora: <b>'+esc(d.construtora)+'</b></span>':'')+
+        (d.data?'<span>Vistoria: <b>'+esc(d.data)+'</b></span>':'')+
+        '<span>Atualizada '+tempoRel(v.atualizadoEm)+'</span>'+
+      '</div>'+
+      '<div class="card__stats">'+
+        '<span><strong>'+na+'</strong> ambiente'+(na===1?'':'s')+'</span>'+
+        '<span><strong>'+nf+'</strong> foto'+(nf===1?'':'s')+'</span>'+
+      '</div>'+
+      '<div class="card__acts">'+
+        '<button class="btn-abrir" onclick="abrirVistoria(\''+v.id+'\')">✏️ Abrir / Editar</button>'+
+        '<select class="statusSel" onchange="mudarStatus(\''+v.id+'\',this.value)" title="Mudar status">'+opt+'</select>'+
+      '</div>'+
+      '<div class="card__acts">'+
+        '<button class="mini" onclick="renomear(\''+v.id+'\')">✎ Renomear</button>'+
+        '<button class="mini" onclick="duplicarVistoria(\''+v.id+'\')">⧉ Duplicar</button>'+
+        '<button class="mini" onclick="exportarVistoria(\''+v.id+'\')">⬇ Exportar</button>'+
+        '<button class="mini danger" onclick="excluirVistoria(\''+v.id+'\')">🗑 Excluir</button>'+
+      '</div>'+
+    '</div>';
+  }).join("")+'</div>';
+}
+function setFiltro(k){ filtroStatus=k; render(); }
+document.getElementById("busca").addEventListener("input",e=>{ termoBusca=e.target.value.trim(); render(); });
+
+/* ---------- Armazenamento ---------- */
+async function mostrarArmazenamento(){
+  const el=document.getElementById("armazenamento");
+  try{
+    if(navigator.storage&&navigator.storage.estimate){
+      const e=await navigator.storage.estimate();
+      const mb=(e.usage/1048576).toFixed(1);
+      el.textContent="Armazenamento usado: "+mb+" MB";
+    } else el.textContent="";
+  }catch(_){ el.textContent=""; }
+}
+
+/* ---------- Init ---------- */
+(async()=>{
+  try{
+    vdb=await abrirDB(VDB,1,db=>{ if(!db.objectStoreNames.contains(VSTORE)) db.createObjectStore(VSTORE,{keyPath:"id"}); });
+    rdb=await abrirDB(RDB,1,db=>{ if(!db.objectStoreNames.contains(RSTORE)) db.createObjectStore(RSTORE); });
+    await migrarLegado();
+    await syncBack();
+    await render();
+    mostrarArmazenamento();
+  }catch(e){
+    document.getElementById("lista").innerHTML=
+      '<div class="empty"><h3>Erro ao abrir o armazenamento</h3>'+
+      '<p>'+esc(String(e))+'</p></div>';
+  }
+})();
+
+// Ao voltar para esta aba (ex.: depois de editar no relatorio.html), re-sincroniza.
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden) syncBack().then(render); });
+window.addEventListener("pageshow",()=>{ syncBack().then(render); });
+</script>
+</body>
+</html>
