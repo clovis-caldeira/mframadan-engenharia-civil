@@ -129,7 +129,10 @@
 
 <div id="editor">
   <div class="topbar">
-    <div><strong>Gerador de Relatório de Vistoria</strong><small>Ferramenta interna — MFRAMADAN Engenharia Civil</small></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="btn-soft" onclick="voltarVistorias()" title="Voltar para a lista de vistorias">← Vistorias</button>
+      <div><strong>Gerador de Relatório de Vistoria</strong><small>Ferramenta interna — MFRAMADAN Engenharia Civil</small></div>
+    </div>
     <div class="actions">
       <span class="save-state" id="saveState">salvo automaticamente</span>
       <button class="btn-soft" onclick="exportarRascunho()">💾 Salvar rascunho</button>
@@ -733,6 +736,12 @@ async function abrirPreview(){
   document.body.classList.add("doc-on");window.scrollTo(0,0);
 }
 function fecharPreview(){document.body.classList.remove("doc-on");}
+function voltarVistorias(){
+  // salva tudo antes de sair, para o gerenciador pegar a versao mais recente
+  setStateMsg("salvando…","wait");
+  persistAgora().then(()=>{ location.href="vistorias.html"; })
+               .catch(()=>{ location.href="vistorias.html"; });
+}
 function imprimirPDF(){
   alert("Antes de salvar o PDF, confira no diálogo de impressão:\n\n"+
         "• Destino: Salvar como PDF\n"+
