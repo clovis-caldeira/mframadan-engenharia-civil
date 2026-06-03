@@ -395,24 +395,47 @@ function handleFiles(input,ambId){
   setStateMsg("processando foto(s)…","wait");
   files.forEach(file=>{
     downscale(file).then(o=>{
-      amb.fotos.push({id:uid(),desc:"",base:o.dataUrl,w:o.w,h:o.h,shapes:[]});
+      amb.fotos.push({id:uid(),desc:"",base:o.dataUrl,w:o.w,h:o.h,shapes:[],capturedAt:o.capturedAt||Date.now()});
       // salva IMEDIATAMENTE cada foto que entra (garantia anti-travamento)
       persistAgora();
       if(--pending===0){renderAmbs();persistAgora();}
     }).catch(()=>{ if(--pending===0){renderAmbs();persistAgora();} });
   });
 }
+/*  PADRONIZACAO DE FOTOS DE VISTORIA
+ *  - Lado mais longo: 1920 px (nunca aumenta imagens menores)
+ *  - Mantem a orientacao original (portrait/landscape) — sem rotacao desnecessaria
+ *  - JPEG; qualidade 0.82 com fallback adaptativo se passar de 1,2 MB
+ *  - Re-encode no canvas remove TODOS os metadados (EXIF, GPS, device)
+ *  - DataTimeOriginal (EXIF) lido ANTES do re-encode e guardado em
+ *    f.capturedAt; se nao houver, usa file.lastModified; se nao, Date.now()
+ */
 function downscale(file){
-  return new Promise((res,rej)=>{
-    // Padrão HD: lado mais longo cabe em 1280; qualidade 0.92 (HD nítido para impressão)
-    const MAX=1280;
+  return new Promise(async(res,rej)=>{
+    const MAX=1920;
+    const TARGET_MAX=1.2*1024*1024;            // 1,2 MB
+    const QUALITIES=[0.82, 0.75, 0.68, 0.60];  // tentativas em ordem
+
+    // tenta ler a data original ANTES de re-encodar (re-encode apaga o EXIF)
+    let capturedAt=null;
+    try{ capturedAt=await lerDataCaptura(file); }catch(_){}
+
     const draw=(bmp,w,h)=>{
       let nw=w,nh=h;
       if(Math.max(w,h)>MAX){const r=MAX/Math.max(w,h);nw=Math.round(w*r);nh=Math.round(h*r);}
       const c=document.createElement("canvas");c.width=nw;c.height=nh;
-      const ctx=c.getContext("2d");ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";
+      const ctx=c.getContext("2d");
+      ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";
       ctx.drawImage(bmp,0,0,nw,nh);
-      res({dataUrl:c.toDataURL("image/jpeg",0.92),w:nw,h:nh});
+      // compressao adaptativa: encolhe a qualidade ate caber em ~1,2 MB
+      let dataUrl="",bytes=0;
+      for(const q of QUALITIES){
+        dataUrl=c.toDataURL("image/jpeg",q);
+        // base64 -> bytes aprox = (len - "data:image/jpeg;base64,".length) * 0.75
+        bytes=Math.round((dataUrl.length-23)*0.75);
+        if(bytes<=TARGET_MAX) break;
+      }
+      res({dataUrl,w:nw,h:nh,bytes,capturedAt:capturedAt||(file.lastModified||Date.now())});
     };
     if(window.createImageBitmap){
       createImageBitmap(file,{imageOrientation:"from-image"})
@@ -424,6 +447,60 @@ function downscale(file){
       img.onload=()=>{draw(img,img.naturalWidth,img.naturalHeight);URL.revokeObjectURL(u);};
       img.onerror=()=>{URL.revokeObjectURL(u);rej();};img.src=u;
     }
+  });
+}
+
+/* Le DateTimeOriginal do EXIF do JPEG (tag 0x9003). Retorna timestamp ms ou null.
+   Implementacao minima: le os primeiros 128 KB e procura o segmento APP1 "Exif". */
+function lerDataCaptura(file){
+  if(!file||!file.type||file.type.indexOf("jpeg")<0) return Promise.resolve(null);
+  const head=file.slice(0,Math.min(file.size,128*1024));
+  return new Promise(resolve=>{
+    const fr=new FileReader();
+    fr.onload=()=>{
+      try{
+        const b=new Uint8Array(fr.result);
+        if(b[0]!==0xFF||b[1]!==0xD8){resolve(null);return;}
+        let p=2;
+        while(p<b.length-4){
+          if(b[p]!==0xFF){resolve(null);return;}
+          const marker=b[p+1], size=(b[p+2]<<8)|b[p+3];
+          if(marker===0xE1 && b[p+4]===0x45 && b[p+5]===0x78 && b[p+6]===0x69 && b[p+7]===0x66){
+            const off=p+10;
+            const little=(b[off]===0x49 && b[off+1]===0x49);
+            const r16=o=>little?(b[o]|(b[o+1]<<8)):((b[o]<<8)|b[o+1]);
+            const r32=o=>little?(b[o]|(b[o+1]<<8)|(b[o+2]<<16)|(b[o+3]<<24))
+                              :((b[o]<<24)|(b[o+1]<<16)|(b[o+2]<<8)|b[o+3]);
+            const ifd0=off+r32(off+4);
+            const num=r16(ifd0);
+            for(let i=0;i<num;i++){
+              const e=ifd0+2+i*12;
+              if(r16(e)===0x8769){  // ExifIFDPointer
+                const sub=off+r32(e+8);
+                const subNum=r16(sub);
+                for(let j=0;j<subNum;j++){
+                  const se=sub+2+j*12;
+                  if(r16(se)===0x9003){  // DateTimeOriginal
+                    const len=r32(se+4);
+                    const valOff=(len>4)?off+r32(se+8):se+8;
+                    let s="";
+                    for(let k=0;k<19 && valOff+k<b.length;k++) s+=String.fromCharCode(b[valOff+k]);
+                    const m=s.match(/^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})/);
+                    resolve(m?new Date(+m[1],+m[2]-1,+m[3],+m[4],+m[5],+m[6]).getTime():null);
+                    return;
+                  }
+                }
+              }
+            }
+            resolve(null);return;
+          }
+          p+=2+size;
+        }
+        resolve(null);
+      }catch(_){ resolve(null); }
+    };
+    fr.onerror=()=>resolve(null);
+    fr.readAsArrayBuffer(head);
   });
 }
 
@@ -532,7 +609,7 @@ function bakedDataUrl(f){
   const ctx=c.getContext("2d");
   return new Promise(res=>{
     const im=new Image();
-    im.onload=()=>{ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";ctx.drawImage(im,0,0,f.w,f.h);f.shapes.forEach(s=>drawShape(ctx,s,f.w));res(c.toDataURL("image/jpeg",0.92));};
+    im.onload=()=>{ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";ctx.drawImage(im,0,0,f.w,f.h);f.shapes.forEach(s=>drawShape(ctx,s,f.w));res(c.toDataURL("image/jpeg",0.85));};
     im.src=f.base;
   });
 }
@@ -606,7 +683,7 @@ function hydrate(o){
   state.sig=Object.assign(blankState().sig,o.sig||{});
   state.layout=[1,2,4].includes(o.layout)?o.layout:1;
   state.ambientes=(o.ambientes||[]).map(a=>({id:a.id||uid(),nome:a.nome||"",
-    fotos:(a.fotos||[]).map(f=>({id:f.id||uid(),desc:f.desc||"",base:f.base||"",w:f.w||1000,h:f.h||750,shapes:f.shapes||[]}))}));
+    fotos:(a.fotos||[]).map(f=>({id:f.id||uid(),desc:f.desc||"",base:f.base||"",w:f.w||1000,h:f.h||750,shapes:f.shapes||[],capturedAt:f.capturedAt||null}))}));
 }
 function loadState(){
   // IndexedDB tem as fotos; localStorage é só fallback do texto
