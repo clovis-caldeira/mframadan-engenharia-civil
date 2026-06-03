@@ -110,13 +110,17 @@
     /* !important vence .doc-on #doc (cinza) — senao o fundo cinza vaza
        por baixo das paginas no PDF */
     #doc,.doc-on #doc{display:block!important;background:#fff!important;padding:0!important}
-    /* cada .pg = exatamente 1 folha: altura pelo conteudo (sem forcar altura),
-       evitando estouro que gerava paginas em branco */
-    .pg{width:auto;min-height:0;height:auto;margin:0;padding:12mm 14mm;
-        box-shadow:none;display:block;page-break-after:always;break-after:page}
+    /* cada .pg = 1 folha A4 com altura ~igual a folha:
+       - min-height 250mm cabe dentro da area imprimivel mesmo com os
+         cabecalhos/rodapes do navegador ligados (~253mm uteis)
+       - flex column + margin-top:auto no rodape -> rodape no FIM da pagina
+       - se o conteudo for maior que 250mm a pg cresce naturalmente */
+    .pg{width:auto;min-height:250mm;height:auto;margin:0;padding:12mm 14mm;
+        box-shadow:none;display:flex;flex-direction:column;
+        page-break-after:always;break-after:page}
     .pg:last-child{page-break-after:auto;break-after:auto}
-    .pg__body{flex:none}
-    .pg__foot{margin-top:16px}
+    .pg__body{flex:1 1 auto}
+    .pg__foot{margin-top:auto}
     .pg .sig{margin-top:30px}
     .pg .sig b{margin-top:26px}
     .pg .par{margin-bottom:9px}
